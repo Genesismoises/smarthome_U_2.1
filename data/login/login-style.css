@@ -1,0 +1,80 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: impact;
+    height: 100vh;
+    margin: 0;
+    background-color: #f7f7f7;
+    background-image:
+        radial-gradient(circle at 90% 10%, #d8c3e0cc, transparent 60%),
+        radial-gradient(circle at 40% 70%, #b8d0f1cc, transparent 50%),
+        radial-gradient(circle at 10% 90%, #c4e3e6cc, transparent 75%),
+        radial-gradient(circle at 75% 50%, #e8e3f0cc, transparent 80%);
+    color: black;
+}
+
+
+
+img {
+    width: 350px;
+    height: auto;
+    
+}
+
+h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input[type="password"] {
+    width: 1000px;
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+
+input[type="submit"]{
+    width: 300px;
+    height: 80;
+    margin: 20px;
+    border-radius: 100px;
+    background-color: 23282e;
+    color: white;
+    font-size: 1.5em;
+    
+   
+}
+
+#error-message {
+    color: red;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 2em;
+}
+
+#password::placeholder {
+    font-size: 30px;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: 23282e;
+        background-image:
+        radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
+        radial-gradient(circle at 40% 70%, #9b3d7d77, transparent 50%),
+        radial-gradient(circle at 10% 90%, #1d2b4f77, transparent 75%),
+        radial-gradient(circle at 75% 50%, #3e336b77, transparent 80%);
+        color: white;
+    }
+    
+    img {
+        content: url('./images/user-icon-white.png');
+    }
+}

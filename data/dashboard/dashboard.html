@@ -1,0 +1,214 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Dashboard</title>
+        <link rel="stylesheet" href="dashboard-style.css">
+    </head>
+    <body>
+        <nav id="main-nav">
+            <img src="./images/control-black.png" alt="control" class="control-button">
+        </nav>
+
+
+
+        <div id="control-menu">
+                
+            <nav id="control-nav">
+                <img src="./images/control-black.png" alt="control" class="control-button">
+            </nav>
+
+            <div class="control-content">
+
+                <div class="control-header">
+                    <h1>Controls</h1>
+                </div>
+
+                <!-- DOOR SECTION -->
+                <div class="control-section">
+                    <h3>Door</h3>
+            
+                    <div class="control-row">
+                        <span>Door</span>
+
+                        <div class="toggle-container">
+                            <span>CLOSE</span>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                            <span>OPEN</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIGHTS SECTION -->
+                <div class="control-section">
+                    <h3>Lights</h3>
+
+                    <div class="control-row">
+                        <span>Room 1</span>
+                        <div class="toggle-container">
+                            <span>OFF</span>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                            <span>ON</span>
+                        </div>
+                    </div>
+
+                    <div class="control-row">
+                        <span>Room 2</span>
+                        <div class="toggle-container">
+                            <span>OFF</span>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                            <span>ON</span>
+                        </div>
+                    </div>
+                </div>
+
+        
+                <div class="control-section">
+                    <h3>Buzzer</h3>
+
+                    <div class="control-row">
+                        <span>Buzz</span>
+                        <div class="toggle-container">
+                            <span>OFF</span>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                            <span>ON</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div> 
+        </div> 
+
+
+
+
+            <div id="heading">
+                <h1>Sensor Reading</h1>
+                <h1>System Status</h1>
+            
+            </div>
+
+
+            <div id="sensor-readings">  
+                
+                <div class="parent-box">
+                    <div class="box">
+                        <div>
+                            <img src="./images/temperature-red.png" alt="temperature-icon" id="temperature">
+                            <p>Temperature</p>
+                
+                        </div>
+                        <p>Temperature Reading Here</p>
+                    </div>
+
+                    <div class="box">
+                        <div> 
+                            <img src="./images/humidity-dark.png" alt="humidity-icon" id="humidity">
+                            <p>Humidity</p>
+                        </div>
+                        <p>Humidity Reading Here</p>
+                    </div>
+                </div>
+
+
+                <div class="parent-box">
+                    <div class="box">
+                        <div>
+                            <img src="./images/light-dark.png" alt="light-icon" id="light">
+                            <p>Light Intensity</p>
+                        </div>
+
+                    </div>
+
+                    <div class="box">
+                        <div>
+                            <img src="./images/sound-dark.png" alt="sound-icon" id="sound">
+                            <p>Sound Level</p>
+                        </div>
+                    </div>
+                </div>
+
+                <table>
+                    <tr>
+                        <td>Door</td>
+                        <td>---</td>
+                    </tr>
+
+                    <tr>
+                        <td rowspan="3">Lights <br><br>Room1<br><br>Room2</td>
+                        <td></td>
+                    </tr>
+
+                    <tr id="room1">
+                        <td>---</td>
+                      
+                    </tr>
+
+                    <tr>
+                      
+                        <td>---</td>
+                    </tr>
+
+                    <tr>
+                        <td>Ultrasonic Sensor</td>
+                        <td>---</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Capacitive Sensor</td>
+                        <td>---</td>
+                    </tr>
+
+                    <tr>
+                        <td>Buzzer</td>
+                        <td>---</td>
+                    </tr>
+
+
+
+                </table>
+
+                
+                <canvas>
+                </canvas> 
+
+            </div> 
+
+
+
+
+            <script>
+                const panel = document.getElementById("control-menu");
+                const buttons = document.querySelectorAll(".control-button");
+
+               
+                buttons.forEach(btn => {
+                btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                panel.style.width = panel.style.width === "50%" ? "0" : "50%";
+                    });
+                });
+
+            
+                document.addEventListener("click", (e) => {
+                if (!panel.contains(e.target) && panel.style.width === "50%") {
+                panel.style.width = "0";
+                    }
+                });
+            </script>
+
+
+
+    </body>
+</html>
