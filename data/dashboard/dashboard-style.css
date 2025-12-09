@@ -1,5 +1,6 @@
 body{
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
     width: auto;
     background-color: #f7f7f7;
     background-image:
@@ -67,29 +68,68 @@ body{
     height: 100vh;
     border-radius: 10px 0 10px 0;
     border: solid 1px #C3C3C3;
+ 
 
     
+
+}
+.parent-box {
+    display: flex;
 
 }
 
 #heading {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 200px 10vw 0 10vw;
     font-family: Arial, Helvetica, sans-serif;
-    margin-top: 200px;
     color: #333333;
-    gap: 900px;
-    margin-left: 100px;
+    gap: 20px;
     font-size: 1.5em;
 }
 
 #sensor-readings {
-    margin-top: 50px;
-    margin-left: 10vw;
     display: flex;
-    gap: 2vw;
-    display: flex;
-    flex-wrap: wrap;
+    
+    gap: 8vw;
+    padding: 0 5vw;
+    margin-top: 200px;
+    align-items: stretch;
 }
+
+.column {
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 40px;         /* ← equal spacing on all sides */
+    box-sizing: border-box;
+     display: flex;
+    flex-direction: column;
+}
+.column table {
+    
+    height: 85%;
+    width: 100%;
+
+}
+
+
+.column-header {
+    margin-bottom: 20px;
+    font-size: 2.5em;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333333;
+}
+
+/* keep your box layout exactly the same */
+#sensor-readings-content {
+    display: flex;
+    flex-direction:  column;
+    gap: 0;
+}
+
+
 
 .box {
     background-color: #FAFAFA;
@@ -98,12 +138,20 @@ body{
     border-radius: 50px;
     margin: 20px;
     margin-bottom: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 400px;
-    height: 400px
+    width: 25vw;
+    height: 25vw;
+    min-width: 200px;         /* ensures box doesn’t shrink too much */
+    min-height: 200px;        /* keeps height reasonable */
+    max-width: 400px;         /* optional: caps on very large screens */
+    max-height: 400px;
+    display: flex;            /* make it a flex container */
+    flex-direction: column;   /* stack box-content naturally */
+    justify-content: center;  /* center vertically */
+    align-items: center;      /* center horizontally */
+    padding: 20px;  
+    
 }
+
 
 .box:hover {
     transform: translateY(-5px);
@@ -111,14 +159,17 @@ body{
 }
 
 .box img { 
-    width: 200px;
-    height: 200px;
+    width: 6vw;
+    height: auto;
     padding: 10px;
 }
-
-.box div {
-    text-align: center; 
+.box p {
+    font-weight: bold;
+    
 }
+
+
+
 
 p {
     font-size: 2em;
@@ -126,12 +177,11 @@ p {
 }
 
 table {
-    margin: 2vw 0 0 0vw;
+    margin-top: 50px;
     width: 90%;
-    max-width: 1200px;
+    min-width: 900px;
     border-collapse: collapse;
     color: #333333;
-    width: 90%;
     border: solid;
     border-radius: 50px;
     overflow: hidden;
@@ -149,9 +199,11 @@ td {
 
 
 
+
+
 @media(prefers-color-scheme: dark) {
     body {
-        background-color: 23282e;
+        background-color: #23282e;
         background-image:
         radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
         radial-gradient(circle at 40% 70%, #9b3d7d77, transparent 50%),
@@ -167,26 +219,32 @@ td {
     }
 
     #control-menu {
-        border: none;
-        background-color: 23282e;
+        border: 1px solid #34364B;
+        background-color: #23282e;
         background-image:
         radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
         radial-gradient(circle at 40% 70%, #9b3d7d77, transparent 50%),
         radial-gradient(circle at 10% 90%, #1d2b4f77, transparent 75%),
         radial-gradient(circle at 75% 50%, #3e336b77, transparent 80%);
+        height: 100vh;
+      
     }
 
 
-
+    :root {
+        --control-menu-width: 25%; /* default width */
+    }
+    
     #main-nav {
-         background-color: #282A3A;
+        background-color: #282A3A;
         color: #F4F4F4;
         box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
     }
 
-    #main-nav img {
+    #main-nav img, #control-nav img {
         content: url('./images/control-white.png');
     }      
+    
     
     
     
@@ -216,9 +274,35 @@ td {
     #light {
         content: url('./images/light-yellow.png');
     }
+
+    #control-menu, 
+    #control-menu * {
+        color: white;
+    }
+    
+    #control-menu .toggle-container span {
+        color: white;
+    }
+
+    #sensor-readings-content .box p, .column {
+        color: #F4F4F4;
+    }
+    .column-header {
+        color: white
+    
+    }
+    footer {
+        color: white;
+    }
 } 
 
 
+.box-content {
+    display: flex;     
+    align-items: center;  
+    justify-content: center; 
+    gap: 0.5em;  
+}
 /* Controls ni marcos*/
 
 
@@ -226,15 +310,12 @@ td {
     padding: 50px;
     font-family: Arial, sans-serif;
     color: #333;
-
 }
 
 .control-header {
-    display: flex;
+    padding: 0;
+    justify-content: center;
     text-align: center;
-    gap: 50px;
-    margin-bottom: 25px;
-    padding-left: 500px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1.5em;
    
@@ -275,6 +356,7 @@ td {
     justify-content: space-between;
     align-items: center;
     margin: 12px 0;
+   flex-wrap: wrap;
     font-size: 18px;
     gap: 10px;
 }
@@ -339,4 +421,137 @@ span {
 
 .control-section h3 {
     font-size: 2em;
+}
+
+footer {
+    color: #333333;
+    padding: 18px 5vw;          
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
+    margin-top: 40px;        
+}
+
+footer hr {
+    border: none;
+    height: 1px;              
+    background-color: #C3C3C3;
+    width: 50%;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;                   
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-logo img {
+    width: 60px;         
+    margin-bottom: 5px;
+}
+
+.footer-logo p {
+    margin: 2px 0;
+    font-size: 0.85em;        
+}
+
+.footer-subtitle {
+    font-size: 0.75em;
+    color: #555;
+}
+
+.footer-column {
+    flex-direction: column;
+    margin-bottom: 3px;
+}
+
+.footer-column p {
+    margin: 2px 0;
+    font-size: 0.85em;
+}
+
+.footer-title {
+    font-weight: bold;
+    font-size: 1em;           
+    margin-bottom: 3px;
+}
+.footer-bottom {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    gap: 10px;             
+    text-align: center;
+    margin-top: 2px;
+}
+.footer-bottom img {
+    width: 50px;             
+    height: auto;             
+    object-fit: contain;     
+}
+
+.footer-bottom-text {
+    font-size: 0.2em;       
+    color: #555;
+    line-height: 0.5;       
+    opacity: 0.8;
+}
+
+
+
+@media (max-width: 800px) {
+    #sensor-readings {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .column {
+        width: 80%;
+        padding: 20px;
+    }
+
+    .column-header{
+        font-size: 1.8em;
+    }
+
+    table {
+        table-layout: fixed;   
+        font-size: 1.4em;
+        width: 90%;            
+        min-width: 0; /*600 dati*/ 
+         
+    }  
+
+    td, th {
+        word-wrap: break-word; 
+        overflow: hidden;
+        font-size: 0.9em;
+        padding: 10px;
+    }
+
+    .box {
+        width: 90vw;   /* make box wider on mobile relative to viewport */
+        height: auto;  /* keep aspect ratio */
+    }
+
+    .box p {
+        font-size: 1.5em;  /* adjust font size for smaller boxes */
+    }
+
+    
+
+    .box img {
+        width: 15vw;
+        max-width: 90px;
+        padding: 1px;  
+    }
+
+        
+    :root {
+        --control-menu-width: 50%; /* mobile width */
+    }
+
+    
+        
 }

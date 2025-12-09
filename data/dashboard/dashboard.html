@@ -1,6 +1,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=0.5">
         <title>Dashboard</title>
         <link rel="stylesheet" href="dashboard-style.css">
     </head>
@@ -93,120 +94,219 @@
 
 
 
-            <div id="heading">
-                <h1>Sensor Reading</h1>
-                <h1>System Status</h1>
             
-            </div>
 
-
+            
             <div id="sensor-readings">  
                 
-                <div class="parent-box">
-                    <div class="box">
-                        <div>
-                            <img src="./images/temperature-red.png" alt="temperature-icon" id="temperature">
-                            <p>Temperature</p>
-                
-                        </div>
-                        <p>Temperature Reading Here</p>
+                <div class="column">
+                    <div class="column-header">
+                        <h2>Sensor Readings</h2>
                     </div>
 
-                    <div class="box">
-                        <div> 
-                            <img src="./images/humidity-dark.png" alt="humidity-icon" id="humidity">
+                    <div id="sensor-readings-content">
+                    <div class="parent-box">
+                        <div class="box">
+                            <div class="box-content">
+                                <img src="./images/temperature-red.png" alt="temperature-icon" id="temperature">
+                                <p id="temp-value"></p>
+                            </div>
+                            <p>Temperature</p>
+                        </div>
+
+                        <div class="box">
+                            <div class="box-content"> 
+                                <img src="./images/humidity-dark.png" alt="humidity-icon" id="humidity">
+                                <p id="humid-value"></p>
+                            </div>
                             <p>Humidity</p>
                         </div>
-                        <p>Humidity Reading Here</p>
                     </div>
-                </div>
 
 
-                <div class="parent-box">
-                    <div class="box">
-                        <div>
-                            <img src="./images/light-dark.png" alt="light-icon" id="light">
+                    <div class="parent-box">
+                        <div class="box">
+                            <div class="box-content">
+                                <img src="./images/light-dark.png" alt="light-icon" id="light">
+                                <p>0.00 Lx</p>
+                            </div>
                             <p>Light Intensity</p>
+
                         </div>
 
-                    </div>
-
-                    <div class="box">
-                        <div>
-                            <img src="./images/sound-dark.png" alt="sound-icon" id="sound">
+                        <div class="box">
+                            <div class="box-content">
+                                <img src="./images/sound-dark.png" alt="sound-icon" id="sound">
+                                <p>0.00 dB</p>
+                            </div>
                             <p>Sound Level</p>
                         </div>
                     </div>
+                    </div>
                 </div>
 
-                <table>
-                    <tr>
-                        <td>Door</td>
-                        <td>---</td>
-                    </tr>
+                <div class="column">
+                    <div class="column-header">
+                        <h2>Sensor Status</h2>
+                    </div>
 
-                    <tr>
-                        <td rowspan="3">Lights <br><br>Room1<br><br>Room2</td>
-                        <td></td>
-                    </tr>
+                    <table>
+                        <tr>
+                            <td>Door</td>
+                            <td>Locked</td>
+                        </tr>
 
-                    <tr id="room1">
-                        <td>---</td>
+                        <tr>
+                            <td rowspan="3">Lights <br><br>Room1<br><br>Room2</td>
+                            <td></td>
+                        </tr>
+
+                        <tr id="room1">
+                            <td>ON</td>
+                            
                       
-                    </tr>
+                        </tr>
 
-                    <tr>
+                        <tr>
                       
-                        <td>---</td>
-                    </tr>
+                           <td>ON</td>
+                        </tr>
 
-                    <tr>
-                        <td>Ultrasonic Sensor</td>
-                        <td>---</td>
-                    </tr>
+                        <tr>
+                            <td>Ultrasonic Sensor</td>
+                            <td>Active</td>
+                        </tr>
                     
-                    <tr>
-                        <td>Capacitive Sensor</td>
-                        <td>---</td>
-                    </tr>
+                        <tr>
+                            <td>Capacitive Sensor</td>
+                            <td>Active</td>
+                        </tr>
 
-                    <tr>
-                        <td>Buzzer</td>
-                        <td>---</td>
-                    </tr>
+                        <tr>
+                            <td>Buzzer</td>
+                            <td>OFF</td>
+                        </tr>
+
+                         <tr>
+                            <td>Buzzer</td>
+                            <td></td>
+                        </tr>
+
+                         <tr>
+                            <td>Buzzer</td>
+                            <td>---</td>
+                        </tr>
+                         <tr>
+                            <td>Buzzer</td>
+                            <td>---</td>
+                        </tr>
 
 
 
-                </table>
+                    </table>
+                </div>
 
+            </div>
                 
                 <canvas>
                 </canvas> 
 
-            </div> 
 
 
 
 
-            <script>
-                const panel = document.getElementById("control-menu");
-                const buttons = document.querySelectorAll(".control-button");
+        <footer>
+            <div class="footer-bottom">
+                <img src="./images/cvsu-logo.png" alt="cvsu-logo">
+                <div class="footer-bottom-text">
+                    <p>Republic of the Philippines</p>
+                    <p>CAVITE STATE UNIVERSITY</p>
+                    <p>Carmona, Cavite</p>
+                </div>
+            </div>
+            <hr>
 
-               
-                buttons.forEach(btn => {
+            <div class="footer-content">
+
+                <div class="footer-logo">
+                    <img src="./images/logo-black.png" alt="logo">
+                    <p>Integrated Smart Home Kineme</p>
+                    <p class="footer-subtitle">Submitted in partial fulfillment of CPEN 85 & CPEN 101</p>
+                     <p class="footer-subtitle">Cavite State University – Carmona Campus</p>
+                </div>
+
+                <div class="footer-column">
+                    <p class="footer-title">Team Members:</p>
+                </div>
+
+                <div class="footer-column">
+                    <p>Jannah Gaspar</p>
+                    <p>Angelo Gripon Jr.</p>
+                    <p>Jay Johnlie Galo</p>
+                </div>
+
+                <div class="footer-column">
+                    <p>Yuan Ancheta</p>
+                    <p>Marcus Miranda</p>
+                </div>
+
+                    <div class="footer-column">
+                    <p>Shiena Rose Madridano</p>
+                    <p>Genesis Baldonasa</p>
+                </div>
+
+            </div>
+
+    
+
+    
+        </footer>
+
+
+
+        <script>
+            const panel = document.getElementById("control-menu");
+            const buttons = document.querySelectorAll(".control-button");
+
+            // Function to get the current control menu width from CSS variable
+            function getMenuWidth() {
+            return getComputedStyle(document.documentElement).getPropertyValue('--control-menu-width') || '25%';
+            }
+
+            buttons.forEach(btn => {
                 btn.addEventListener("click", (e) => {
-                e.stopPropagation();
-                panel.style.width = panel.style.width === "50%" ? "0" : "50%";
-                    });
+                    e.stopPropagation();
+                 // Toggle panel width using the variable
+                    panel.style.width = panel.style.width === getMenuWidth() ? "0" : getMenuWidth();
                 });
+            });
 
-            
-                document.addEventListener("click", (e) => {
-                if (!panel.contains(e.target) && panel.style.width === "50%") {
-                panel.style.width = "0";
+            document.addEventListener("click", (e) => {
+                if (!panel.contains(e.target) && panel.style.width === getMenuWidth()) {
+                    panel.style.width = "0";
+                }
+            });
+        </script>
+
+        <script>
+                async function updateSensorReadings() {
+                    try {
+                        const response = await fetch('/sensor-data');
+                        const data = await response.json();
+                        
+                        document.getElementById('temp-value').innerText = data.temperature + ' C';
+                        document.getElementById('humid-value').innerText = data.humidity + ' %';
+                        
+                    } catch (error) {
+                        console.error('Error fetching sensor data:', error);
                     }
-                });
+                   
+                    
+                }
+                 setInterval(updateSensorReadings, 5000);
+                    updateSensorReadings();
             </script>
+
 
 
 

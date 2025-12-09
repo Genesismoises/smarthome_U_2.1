@@ -3,6 +3,12 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
+#include "DHT.h"
+
+#define DHTPIN 2
+#define DHTTPE DHT22
+DHT dht(DHTPIN, DHT22);
+
 
 // --- WiFi credentials ---
 const char* ssid = "VivoV19Neo";
@@ -21,9 +27,9 @@ void setup() {
     delay(500);
     Serial.println("\n=== ESP32 STARTUP ===");
 
-    // --- Mount LittleFS safely ---
+    // --- Mount LittleFS 
     Serial.println("Mounting LittleFS...");
-    if (!LittleFS.begin(false)) { // false = do not format
+    if (!LittleFS.begin(false)) { // false = means do not format if mount fails
     Serial.println("LittleFS mount failed!");
 } else {
     Serial.println("LittleFS mounted successfully.");
@@ -52,6 +58,23 @@ void setup() {
         Serial.println("No WiFi — server will still run (AP fallback could be added).");
     }
 
+    // ===== Sensor endpoint =====
+  server.on("/sensor-data", HTTP_GET, [](AsyncWebServerRequest *request){
+    float temp = dht.readTemperature();
+    float hum = dht.readHumidity();
+
+    // Handle sensor read errors
+    if (isnan(temp)) temp = 0.00;
+    if (isnan(hum)) hum = 0.00;
+
+    String json = "{\"temperature\":";
+    json += temp;
+    json += ",\"humidity\":";
+    json += hum;
+    json += "}";
+    request->send(200, "application/json", json);
+  });
+
     // --- Setup HTTP server ---
     Serial.println("Setting up HTTP server...");
 
@@ -62,7 +85,7 @@ void setup() {
     server.serveStatic("/login/", LittleFS, "/login/");
     server.serveStatic("/login/images/", LittleFS, "/login/images/");
 
-    // Example route for dashboard
+    // Route for dashboard
     server.on("/dashboard/dashboard.html", HTTP_GET, [](AsyncWebServerRequest *request){
         if (LittleFS.exists("/dashboard/dashboard.html")) {
             request->send(LittleFS, "/dashboard/dashboard.html", "text/html");
@@ -75,8 +98,11 @@ void setup() {
     server.begin();
     Serial.println("HTTP server started.");
     Serial.println("=== SETUP COMPLETE ===");
+
+
+  
 }
 
 void loop() {
-    // Nothing needed here; AsyncWebServer handles requests asynchronously
+    
 }
