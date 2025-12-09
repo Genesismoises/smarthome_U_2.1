@@ -6,9 +6,13 @@
 #include "DHT.h"
 
 #define DHTPIN 2
-#define DHTTPE DHT22
+#define DHTTYPE DHT22
 DHT dht(DHTPIN, DHT22);
 
+// Variables to store last readings of DHT22
+unsigned long lastRead = 0;
+float lastTemp = 0;
+float lastHum = 0;
 
 // --- WiFi credentials ---
 const char* ssid = "VivoV19Neo";
@@ -25,6 +29,8 @@ void notFound(AsyncWebServerRequest *request) {
 void setup() {
     Serial.begin(115200);
     delay(500);
+
+    dht.begin(); //start DHT sensor
     Serial.println("\n=== ESP32 STARTUP ===");
 
     // --- Mount LittleFS 
@@ -60,17 +66,21 @@ void setup() {
 
     // ===== Sensor endpoint =====
   server.on("/sensor-data", HTTP_GET, [](AsyncWebServerRequest *request){
-    float temp = dht.readTemperature();
-    float hum = dht.readHumidity();
+    if (millis() - lastRead > 2000) { // Read DHT22 output every 2 seconds
+        lastTemp = dht.readTemperature();
+        lastHum = dht.readHumidity();
+        lastRead = millis();
+    }
+   
 
     // Handle sensor read errors
-    if (isnan(temp)) temp = 0.00;
-    if (isnan(hum)) hum = 0.00;
+    if (isnan(lastTemp)) lastTemp = 0.00;
+    if (isnan(lastHum)) lastHum = 0.00;
 
     String json = "{\"temperature\":";
-    json += temp;
+    json += lastTemp;
     json += ",\"humidity\":";
-    json += hum;
+    json += lastHum;
     json += "}";
     request->send(200, "application/json", json);
   });
