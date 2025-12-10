@@ -4,6 +4,7 @@
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
 #include "DHT.h"
+#include <ESP32Servo.h>
 
 #define DHTPIN 2
 #define DHTTYPE DHT22
@@ -14,9 +15,14 @@ unsigned long lastRead = 0;
 float lastTemp = 0;
 float lastHum = 0;
 
+// Variables for servo
+Servo doorServo;
+const int servoPin = 18;
+
+
 // --- WiFi credentials ---
-const char* ssid = "VivoV19Neo";
-const char* password = "password";
+const char* ssid = "Baldonasa Fam 2.4G";
+const char* password = "Borgoydabest_7";
 
 // Create server on port 80
 AsyncWebServer server(80);
@@ -30,7 +36,16 @@ void setup() {
     Serial.begin(115200);
     delay(500);
 
+    // -- initialize sensors and actuators --
+
     dht.begin(); //start DHT sensor
+    doorServo.setPeriodHertz(50);      
+    doorServo.attach(servoPin, 500, 2400);  
+    doorServo.write(0);                 // Initialize to closed
+    delay(300);
+
+   
+
     Serial.println("\n=== ESP32 STARTUP ===");
 
     // --- Mount LittleFS 
@@ -84,6 +99,28 @@ void setup() {
     json += "}";
     request->send(200, "application/json", json);
   });
+
+    // ===== Servo control endpoint =====
+
+
+  server.on("/door", HTTP_GET, [](AsyncWebServerRequest *request){
+        if(request->hasParam("state")){
+            String state = request->getParam("state")->value();
+            if(state == "open"){
+                doorServo.write(180); // Open door
+                Serial.println("Door opened (180°)");
+            } else {
+                doorServo.write(0);   // Close door
+                Serial.println("Door closed (0°)");
+            }
+            request->send(200, "text/plain", "Door moved: " + state);
+        } else {
+            request->send(400, "text/plain", "Missing state parameter");
+        }
+    });
+
+
+
 
     // --- Setup HTTP server ---
     Serial.println("Setting up HTTP server...");

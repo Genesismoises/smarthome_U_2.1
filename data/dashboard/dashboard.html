@@ -34,7 +34,7 @@
                         <div class="toggle-container">
                             <span>CLOSE</span>
                             <label class="switch">
-                                <input type="checkbox">
+                                <input type="checkbox" id="door-control">
                                 <span class="slider"></span>
                             </label>
                             <span>OPEN</span>
@@ -153,7 +153,7 @@
                     <table>
                         <tr>
                             <td>Door</td>
-                            <td>Locked</td>
+                            <td id="door-status"></td>
                         </tr>
 
                         <tr>
@@ -188,18 +188,10 @@
                         </tr>
 
                          <tr>
-                            <td>Buzzer</td>
+                            <td>Sound Sensor</td>
                             <td></td>
                         </tr>
 
-                         <tr>
-                            <td>Buzzer</td>
-                            <td>---</td>
-                        </tr>
-                         <tr>
-                            <td>Buzzer</td>
-                            <td>---</td>
-                        </tr>
 
 
 
@@ -306,6 +298,34 @@
                  setInterval(updateSensorReadings, 2000);
                     updateSensorReadings();
             </script>
+
+        <script>
+             const doorControl = document.getElementById('door-control');
+             const doorStatus = document.getElementById('door-status');
+            
+             doorControl.addEventListener('change', async () => {
+                let state = doorControl.checked ? 'open' : 'close';
+                try {
+                    const response = await fetch('/door?state=' + state);
+                    if (!response.ok) throw new Error('Network response not ok');
+                    console.log('Door command sent: ', state);
+                } catch (error) {
+                    console.error('Error sending door command:', error);
+
+
+                }
+                doorStatus.innerText = state === 'open' ? 'OPEN' : 'CLOSED';
+            });
+            doorStatus.innerText = doorControl.checked ? 'OPEN' : 'CLOSED';
+
+             
+
+
+
+        </script>
+
+           
+        
 
 
 
