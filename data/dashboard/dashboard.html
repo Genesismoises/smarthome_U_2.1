@@ -286,7 +286,7 @@
                         const response = await fetch('/sensor-data');
                         const data = await response.json();
                         
-                        document.getElementById('temp-value').innerText = (data.temperature.toFixed(2) || '--') + ' C';
+                        document.getElementById('temp-value').innerText = (data.tixed(2) || '--') + ' C';
                         document.getElementById('humid-value').innerText = (data.humidity.toFixed(2) || '--') + ' %';
                         
                     } catch (error) {

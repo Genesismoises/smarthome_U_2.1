@@ -21,8 +21,8 @@ const int servoPin = 18;
 
 
 // --- WiFi credentials ---
-const char* ssid = "Baldonasa Fam 2.4G";
-const char* password = "Borgoydabest_7";
+const char* ssid = "VivoV19Neo";
+const char* password = "password";
 
 // Create server on port 80
 AsyncWebServer server(80);
