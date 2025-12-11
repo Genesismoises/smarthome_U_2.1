@@ -5,6 +5,7 @@
 #include <LittleFS.h>
 #include "DHT.h"
 #include <ESP32Servo.h>
+#include <ArduinoJson.h>
 
 #define DHTPIN 2
 #define DHTTYPE DHT22
@@ -19,6 +20,21 @@ float lastHum = 0;
 Servo doorServo;
 const int servoPin = 18;
 
+// Variables for sound sensor
+
+const int soundPin = 34;   // AO pin
+const int led1 = 14;
+const int led2 = 27;
+const int led3 = 13;
+
+int threshold = 1000;
+unsigned long clapTimeout = 800;
+unsigned long lastClapTime = 0;
+int clapCount = 0;
+bool lightsOn = false;
+
+int currentSoundValue = 0; // <- will be sent to dashboard
+
 
 // --- WiFi credentials ---
 const char* ssid = "Baldonasa Fam 2.4G";
@@ -26,6 +42,8 @@ const char* password = "Borgoydabest_7";
 
 // Create server on port 80
 AsyncWebServer server(80);
+
+
 
 // Handle 404
 void notFound(AsyncWebServerRequest *request) {
@@ -38,6 +56,17 @@ void setup() {
 
     // -- initialize sensors and actuators --
 
+    // Sound + LEDs
+    pinMode(led1, OUTPUT);
+    pinMode(led2, OUTPUT);
+    pinMode(led3, OUTPUT);
+    digitalWrite(led1, LOW); 
+    digitalWrite(led2, LOW);
+    digitalWrite(led3, LOW);
+
+Serial.println(">>> Sound Sensor + Clap Control Loaded <<<");
+
+    // DHT22
     dht.begin(); //start DHT sensor
     doorServo.setPeriodHertz(50);      
     doorServo.attach(servoPin, 500, 2400);  
@@ -100,6 +129,14 @@ void setup() {
     request->send(200, "application/json", json);
   });
 
+  server.on("/sound-data", HTTP_GET, [](AsyncWebServerRequest *request) {
+    StaticJsonDocument<100> data;
+    data["sound"] = currentSoundValue;
+    String json;
+    serializeJson(data, json);
+    request->send(200, "application/json", json);
+});
+
     // ===== Servo control endpoint =====
 
 
@@ -151,5 +188,44 @@ void setup() {
 }
 
 void loop() {
+
+    // ===== SOUND SENSOR READ + CLAP DETECTION =====
+    currentSoundValue = analogRead(soundPin);
+
+    // Optional serial print every 200ms (not spam)
+    static unsigned long lastPrint = 0;
+    if (millis() - lastPrint > 200) {
+  Serial.print("sound=");
+  Serial.println(currentSoundValue);
+  lastPrint = millis();
+}
+
+    // Detect clap
+    if (currentSoundValue > threshold) {
+        unsigned long now = millis();
+        if (now - lastClapTime > 80) {  // debounce
+            clapCount++;
+            Serial.print("Clap detected. Count= ");
+            Serial.println(clapCount);
+            lastClapTime = now;
+        }
+    }
+
+    // If 2 claps -> toggle LEDs
+    if (clapCount >= 2) {
+        lightsOn = !lightsOn;
+        digitalWrite(led1, lightsOn);
+        digitalWrite(led2, lightsOn);
+        digitalWrite(led3, lightsOn);
+        Serial.println(lightsOn ? "LEDs ON" : "LEDs OFF");
+        clapCount = 0;
+        delay(400);
+    }
+
+    // Reset clap count if no second clap
+    if (millis() - lastClapTime > clapTimeout) {
+        clapCount = 0;
+    }
+
     
 }
