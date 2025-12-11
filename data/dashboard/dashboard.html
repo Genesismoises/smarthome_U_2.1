@@ -128,18 +128,18 @@
                         <div class="box">
                             <div class="box-content">
                                 <img src="./images/light-dark.png" alt="light-icon" id="light">
-                                <p>0.00 Lx</p>
+                                <p id="light-value">0.00 Lx</p>
                             </div>
-                            <p id="light-value"></p>
+                            <p>Light Intensity</p>
 
                         </div>
 
                         <div class="box">
                             <div class="box-content">
                                 <img src="./images/sound-dark.png" alt="sound-icon" id="sound">
-                                <p>0.00 dB</p>
+                                <p id="sound-value">0.00 dB</p>
                             </div>
-                            <p id="sound-value"></p>
+                            <p>Sound Value</p>
                         </div>
                     </div>
                     </div>
@@ -286,8 +286,9 @@
                         const response = await fetch('/sensor-data');
                         const data = await response.json();
                         
-                        document.getElementById('temp-value').innerText = (data.tixed(2) || '--') + ' C';
-                        document.getElementById('humid-value').innerText = (data.humidity.toFixed(2) || '--') + ' %';
+                        document.getElementById('temp-value').innerText = (data.temperature !== undefined ? data.temperature.toFixed(2) : '--') + ' C';
+
+                        document.getElementById('humid-value').innerText = (data.humidity !== undefined ? data.humidity.toFixed(2) : '--') + ' %';
                         
                     } catch (error) {
                         console.error('Error fetching sensor data:', error);
