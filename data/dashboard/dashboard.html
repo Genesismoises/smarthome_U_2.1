@@ -51,7 +51,7 @@
                         <div class="toggle-container">
                             <span>OFF</span>
                             <label class="switch">
-                                <input type="checkbox">
+                                <input type="checkbox" id="room1Control">
                                 <span class="slider"></span>
                             </label>
                             <span>ON</span>
@@ -63,7 +63,7 @@
                         <div class="toggle-container">
                             <span>OFF</span>
                             <label class="switch">
-                                <input type="checkbox">
+                                <input type="checkbox" id="room2Control">
                                 <span class="slider"></span>
                             </label>
                             <span>ON</span>
@@ -190,7 +190,7 @@
 
                          <tr>
                             <td>Sound Sensor</td>
-                            <td></td>
+                            <td id="soundSenStatus"></td>
                         </tr>
 
 
@@ -302,6 +302,7 @@
                         const data = await response.json();
 
                         document.getElementById('sound-value').innerText = (data.sound !== undefined ? data.sound : '--');
+                        document.getElementById('soundSenStatus').innerText = data.clapDetected || '--';
 
                     }
                     catch (error) {
@@ -351,16 +352,51 @@
                     document.getElementById('room1State').innerText = data.ldr || '--';
                     document.getElementById('room2State').innerText = data.sound || '--';
                 } 
-                
+
                 catch (error) {
                     console.error('Error fetching LED states:', error);
                 }
-}
+            }
 
-// Update every 200ms
-setInterval(updateLEDStates, 200);
-updateLEDStates();
+            // Update every 200ms
+            setInterval(updateLEDStates, 200);
+            updateLEDStates();
+        </script>
+
+        <script>
+            async function updateLEDStates() {
+                try {
+                    const response = await fetch('/led-status');
+                    const data = await response.json();
+
+                    // Update table cells
+                    document.getElementById('room1State').innerText = data.ldr || '--';
+                    document.getElementById('room2State').innerText = data.sound || '--';
+
+                    // Update checkboxes
+                    document.getElementById('room1Control').checked = data.ldr === 'ON';
+                    document.getElementById('room2Control').checked = data.sound === 'ON';
+
+                } catch (error) {
+                    console.error('Error fetching LED states:', error);
+                }
+            }
+                setInterval(updateLEDStates, 200);
+                updateLEDStates();
+        </script>
+
+<script>
+document.getElementById('room1Control').addEventListener('change', async () => {
+    let state = document.getElementById('room1Control').checked ? 'on' : 'off';
+    await fetch(`/room1?state=${state}`);
+});
+
+document.getElementById('room2Control').addEventListener('change', async () => {
+    let state = document.getElementById('room2Control').checked ? 'on' : 'off';
+    await fetch(`/room2?state=${state}`);
+});
 </script>
+
 
 
         <script>

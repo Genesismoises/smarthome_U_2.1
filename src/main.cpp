@@ -33,6 +33,7 @@ unsigned long lastClapTime = 0;
 int clapCount = 0;
 bool lightsOn = false;
 int currentSoundValue = 0; // <- will be sent to dashboard
+bool clapDetected = false;  // flag for clap detector in dashboard
 
 //LDR variables
 
@@ -42,6 +43,13 @@ const int ldrLed2 = 5;
 const int ldrLed3 = 16;
 int ldrThreshold = 2000;       
 int currentLdrValue = 0;       // <- will be sent to dashboard
+
+/// states for manual led controls
+bool ldrSwitchState = false;   // Last commanded state for Room 1 (checkbox)
+bool soundSwitchState = false; // Last commanded state for Room 2 (checkbox)
+
+
+
 
 
 // --- WiFi credentials ---
@@ -88,6 +96,8 @@ void setup() {
     doorServo.attach(servoPin, 500, 2400);  
     doorServo.write(0);                 // Initialize to closed
     delay(300);
+
+
 
    
 
@@ -156,6 +166,7 @@ void setup() {
   server.on("/sound-data", HTTP_GET, [](AsyncWebServerRequest *request) {
     StaticJsonDocument<100> data;
     data["sound"] = currentSoundValue;
+    data["clapDetected"] = clapDetected ? "Clap Detected!" : "Detecting...";
     String json;
     serializeJson(data, json);
     request->send(200, "application/json", json);
@@ -176,6 +187,35 @@ server.on("/led-status", HTTP_GET, [](AsyncWebServerRequest *request){
     serializeJson(data, json);
     request->send(200, "application/json", json);
 });
+
+server.on("/room1", HTTP_GET, [](AsyncWebServerRequest *request){
+    if(request->hasParam("state")){
+        String state = request->getParam("state")->value();
+        ldrSwitchState = (state == "on");
+        // Immediately update LEDs
+        digitalWrite(ldrLed1, ldrSwitchState);
+        digitalWrite(ldrLed2, ldrSwitchState);
+        digitalWrite(ldrLed3, ldrSwitchState);
+        request->send(200, "text/plain", "Room1 set to " + state);
+    } else {
+        request->send(400, "text/plain", "Missing state parameter");
+    }
+});
+
+server.on("/room2", HTTP_GET, [](AsyncWebServerRequest *request){
+    if(request->hasParam("state")){
+        String state = request->getParam("state")->value();
+        soundSwitchState = (state == "on");
+        // Immediately update LEDs
+        digitalWrite(led1, soundSwitchState);
+        digitalWrite(led2, soundSwitchState);
+        digitalWrite(led3, soundSwitchState);
+        request->send(200, "text/plain", "Room2 set to " + state);
+    } else {
+        request->send(400, "text/plain", "Missing state parameter");
+    }
+});
+
 
 
 
@@ -228,15 +268,12 @@ server.on("/led-status", HTTP_GET, [](AsyncWebServerRequest *request){
 
 
   
-}
-void loop() {
-
+}void loop() {
     unsigned long now = millis();
 
-    // ===== SOUND SENSOR READ + CLAP DETECTION =====
+    // --- SOUND SENSOR + CLAP ---
     currentSoundValue = analogRead(soundPin);
 
-    // Serial print every 200ms
     static unsigned long lastSoundPrint = 0;
     if (now - lastSoundPrint > 200) {
         Serial.print("sound=");
@@ -244,37 +281,39 @@ void loop() {
         lastSoundPrint = now;
     }
 
-    // Detect clap
-    if (currentSoundValue > threshold) {
-        if (now - lastClapTime > 80) {  // debounce
-            clapCount++;
-            Serial.print("Clap detected. Count= ");
-            Serial.println(clapCount);
-            lastClapTime = now;
-        }
+    if (currentSoundValue > threshold && now - lastClapTime > 80) {
+        clapCount++;
+        Serial.print("Clap detected. Count= ");
+        Serial.println(clapCount);
+        lastClapTime = now;
+        clapDetected = true;
     }
 
-    // Toggle LEDs if 2 claps (non-blocking)
-    static bool ledState = false;
+    if (clapDetected && now - lastClapTime > 500) {
+        clapDetected = false;
+    }
+
+    static bool ledState = digitalRead(led1); // track LED state from claps
+
     if (clapCount >= 2) {
-        ledState = !ledState;
-        digitalWrite(led1, ledState);
-        digitalWrite(led2, ledState);
-        digitalWrite(led3, ledState);
-        Serial.println(ledState ? "LEDs ON" : "LEDs OFF");
+        ledState = !ledState; // toggle due to claps
         clapCount = 0;
-        // no delay here
     }
 
-    // Reset clap count if timeout
+    bool sensorSoundState = ledState;
+    bool finalSoundState = soundSwitchState ? true : sensorSoundState; // switch overrides
+    digitalWrite(led1, finalSoundState);
+    digitalWrite(led2, finalSoundState);
+    digitalWrite(led3, finalSoundState);
+    ledState = finalSoundState;
+
     if (now - lastClapTime > clapTimeout) {
         clapCount = 0;
     }
 
-    // ===== LDR READ =====
+    // --- LDR ---
     currentLdrValue = analogRead(ldrPin);
 
-    // Serial print every 200ms
     static unsigned long lastLdrPrint = 0;
     if (now - lastLdrPrint > 200) {
         Serial.print("LDR Value=");
@@ -282,13 +321,9 @@ void loop() {
         lastLdrPrint = now;
     }
 
-    if (currentLdrValue > ldrThreshold) {
-        digitalWrite(ldrLed1, HIGH);
-        digitalWrite(ldrLed2, HIGH);
-        digitalWrite(ldrLed3, HIGH);
-    } else {
-        digitalWrite(ldrLed1, LOW);
-        digitalWrite(ldrLed2, LOW);
-        digitalWrite(ldrLed3, LOW);
-    }
+    bool sensorLdrState = currentLdrValue > ldrThreshold;
+    bool finalLdrState = ldrSwitchState ? true : sensorLdrState; // switch overrides
+    digitalWrite(ldrLed1, finalLdrState);
+    digitalWrite(ldrLed2, finalLdrState);
+    digitalWrite(ldrLed3, finalLdrState);
 }
