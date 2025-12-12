@@ -365,37 +365,45 @@
 
         <script>
             async function updateLEDStates() {
-                try {
-                    const response = await fetch('/led-status');
-                    const data = await response.json();
+            try {
+                const response = await fetch('/led-status');
+                const data = await response.json();
 
-                    // Update table cells
-                    document.getElementById('room1State').innerText = data.ldr || '--';
-                    document.getElementById('room2State').innerText = data.sound || '--';
+                // Get table cells
+                const room1Cell = document.getElementById('room1State');
+                const room2Cell = document.getElementById('room2State');
 
-                    // Update checkboxes
-                    document.getElementById('room1Control').checked = data.ldr === 'ON';
-                    document.getElementById('room2Control').checked = data.sound === 'ON';
+                // Update text
+                room1Cell.innerText = data.ldr || '--';
+                room2Cell.innerText = data.sound || '--';
 
-                } catch (error) {
-                    console.error('Error fetching LED states:', error);
-                }
+                // Set color based on state
+                room1Cell.style.color = data.ldr === 'ON' ? 'green' : 'red';
+                room2Cell.style.color = data.sound === 'ON' ? 'green' : 'red';
+
+                // Update checkboxes
+                document.getElementById('room1Control').checked = data.ldr === 'ON';
+                document.getElementById('room2Control').checked = data.sound === 'ON';
+
+            } catch (error) {
+                console.error('Error fetching LED states:', error);
             }
+        }
                 setInterval(updateLEDStates, 200);
                 updateLEDStates();
         </script>
 
-<script>
-document.getElementById('room1Control').addEventListener('change', async () => {
-    let state = document.getElementById('room1Control').checked ? 'on' : 'off';
-    await fetch(`/room1?state=${state}`);
-});
+        <script>
+        document.getElementById('room1Control').addEventListener('change', async () => {
+            let state = document.getElementById('room1Control').checked ? 'on' : 'off';
+            await fetch(`/room1?state=${state}`);
+        });
 
-document.getElementById('room2Control').addEventListener('change', async () => {
-    let state = document.getElementById('room2Control').checked ? 'on' : 'off';
-    await fetch(`/room2?state=${state}`);
-});
-</script>
+        document.getElementById('room2Control').addEventListener('change', async () => {
+            let state = document.getElementById('room2Control').checked ? 'on' : 'off';
+            await fetch(`/room2?state=${state}`);
+        });
+        </script>
 
 
 
