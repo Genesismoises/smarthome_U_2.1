@@ -161,6 +161,25 @@ void setup() {
     request->send(200, "application/json", json);
 });
 
+// ===== LED status endpoint =====
+
+server.on("/led-status", HTTP_GET, [](AsyncWebServerRequest *request){
+    StaticJsonDocument<100> data;
+
+    // LDR LEDs: check one of them since they are all synced
+    data["ldr"] = digitalRead(ldrLed1) == HIGH ? "ON" : "OFF";
+
+    // Sound LEDs: check one of them
+    data["sound"] = digitalRead(led1) == HIGH ? "ON" : "OFF";
+
+    String json;
+    serializeJson(data, json);
+    request->send(200, "application/json", json);
+});
+
+
+
+
     // ===== Servo control endpoint =====
 
 

@@ -158,18 +158,19 @@
 
                         <tr>
                             <td rowspan="3">Lights <br><br>Room1<br><br>Room2</td>
-                            <td></td>
+                            <td>----</td>
                         </tr>
 
                         <tr id="room1">
-                            <td>ON</td>
+            
+                            <td id="room1State"></td>
                             
                       
                         </tr>
 
                         <tr>
                       
-                           <td>ON</td>
+                           <td id="room2State"></td>
                         </tr>
 
                         <tr>
@@ -339,6 +340,28 @@
                 setInterval(updateLDR, 200);
 
         </script>
+
+        <script>
+            async function updateLEDStates() {
+                try {
+                    const response = await fetch('/led-status');
+                    const data = await response.json();
+
+                    // Update table cells
+                    document.getElementById('room1State').innerText = data.ldr || '--';
+                    document.getElementById('room2State').innerText = data.sound || '--';
+                } 
+                
+                catch (error) {
+                    console.error('Error fetching LED states:', error);
+                }
+}
+
+// Update every 200ms
+setInterval(updateLEDStates, 200);
+updateLEDStates();
+</script>
+
 
         <script>
              const doorControl = document.getElementById('door-control');
