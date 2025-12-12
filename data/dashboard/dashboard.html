@@ -128,7 +128,7 @@
                         <div class="box">
                             <div class="box-content">
                                 <img src="./images/light-dark.png" alt="light-icon" id="light">
-                                <p id="light-value">0.00 Lx</p>
+                                <p id="light-value"></p>
                             </div>
                             <p>Light Intensity</p>
 
@@ -316,7 +316,29 @@
 
                 
             
-            </script>
+        </script>
+
+        <script>
+
+            async function updateLDR() {
+                try {
+                const response = await fetch('/ldr-data'); // call ESP32 endpoint
+                const data = await response.json();
+
+                // Update the <p id="light-value">
+                document.getElementById('light-value').innerText = 
+                (data.light !== undefined ? data.light : '--') + ' Lx';
+
+                } 
+                catch (error) {
+                    console.error('Error fetching LDR data:', error);
+                }
+               
+            }
+                updateLDR();
+                setInterval(updateLDR, 200);
+
+        </script>
 
         <script>
              const doorControl = document.getElementById('door-control');

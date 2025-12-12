@@ -32,8 +32,16 @@ unsigned long clapTimeout = 800;
 unsigned long lastClapTime = 0;
 int clapCount = 0;
 bool lightsOn = false;
-
 int currentSoundValue = 0; // <- will be sent to dashboard
+
+//LDR variables
+
+const int ldrPin = 33;        
+const int ldrLed1 = 19;
+const int ldrLed2 = 5;
+const int ldrLed3 = 16;
+int ldrThreshold = 2000;       
+int currentLdrValue = 0;       // <- will be sent to dashboard
 
 
 // --- WiFi credentials ---
@@ -64,7 +72,15 @@ void setup() {
     digitalWrite(led2, LOW);
     digitalWrite(led3, LOW);
 
-Serial.println(">>> Sound Sensor + Clap Control Loaded <<<");
+    Serial.println(">>> Sound Sensor + Clap Control Loaded <<<");
+
+    //LDR
+    pinMode(ldrLed1, OUTPUT);
+    pinMode(ldrLed2, OUTPUT);
+    pinMode(ldrLed3, OUTPUT);
+    pinMode(ldrPin, INPUT);
+
+    Serial.println(">>> LDR Loaded <<<");
 
     // DHT22
     dht.begin(); //start DHT sensor
@@ -129,6 +145,14 @@ Serial.println(">>> Sound Sensor + Clap Control Loaded <<<");
     request->send(200, "application/json", json);
   });
 
+  server.on("/ldr-data", HTTP_GET, [](AsyncWebServerRequest *request){
+    StaticJsonDocument<100> data;
+    data["light"] = currentLdrValue;
+    String json;
+    serializeJson(data, json);
+    request->send(200, "application/json", json);
+});
+
   server.on("/sound-data", HTTP_GET, [](AsyncWebServerRequest *request) {
     StaticJsonDocument<100> data;
     data["sound"] = currentSoundValue;
@@ -186,23 +210,23 @@ Serial.println(">>> Sound Sensor + Clap Control Loaded <<<");
 
   
 }
-
 void loop() {
+
+    unsigned long now = millis();
 
     // ===== SOUND SENSOR READ + CLAP DETECTION =====
     currentSoundValue = analogRead(soundPin);
 
-    // Optional serial print every 200ms (not spam)
-    static unsigned long lastPrint = 0;
-    if (millis() - lastPrint > 200) {
-  Serial.print("sound=");
-  Serial.println(currentSoundValue);
-  lastPrint = millis();
-}
+    // Serial print every 200ms
+    static unsigned long lastSoundPrint = 0;
+    if (now - lastSoundPrint > 200) {
+        Serial.print("sound=");
+        Serial.println(currentSoundValue);
+        lastSoundPrint = now;
+    }
 
     // Detect clap
     if (currentSoundValue > threshold) {
-        unsigned long now = millis();
         if (now - lastClapTime > 80) {  // debounce
             clapCount++;
             Serial.print("Clap detected. Count= ");
@@ -211,21 +235,41 @@ void loop() {
         }
     }
 
-    // If 2 claps -> toggle LEDs
+    // Toggle LEDs if 2 claps (non-blocking)
+    static bool ledState = false;
     if (clapCount >= 2) {
-        lightsOn = !lightsOn;
-        digitalWrite(led1, lightsOn);
-        digitalWrite(led2, lightsOn);
-        digitalWrite(led3, lightsOn);
-        Serial.println(lightsOn ? "LEDs ON" : "LEDs OFF");
+        ledState = !ledState;
+        digitalWrite(led1, ledState);
+        digitalWrite(led2, ledState);
+        digitalWrite(led3, ledState);
+        Serial.println(ledState ? "LEDs ON" : "LEDs OFF");
         clapCount = 0;
-        delay(400);
+        // no delay here
     }
 
-    // Reset clap count if no second clap
-    if (millis() - lastClapTime > clapTimeout) {
+    // Reset clap count if timeout
+    if (now - lastClapTime > clapTimeout) {
         clapCount = 0;
     }
 
-    
+    // ===== LDR READ =====
+    currentLdrValue = analogRead(ldrPin);
+
+    // Serial print every 200ms
+    static unsigned long lastLdrPrint = 0;
+    if (now - lastLdrPrint > 200) {
+        Serial.print("LDR Value=");
+        Serial.println(currentLdrValue);
+        lastLdrPrint = now;
+    }
+
+    if (currentLdrValue > ldrThreshold) {
+        digitalWrite(ldrLed1, HIGH);
+        digitalWrite(ldrLed2, HIGH);
+        digitalWrite(ldrLed3, HIGH);
+    } else {
+        digitalWrite(ldrLed1, LOW);
+        digitalWrite(ldrLed2, LOW);
+        digitalWrite(ldrLed3, LOW);
+    }
 }
