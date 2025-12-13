@@ -177,6 +177,7 @@ p {
 }
 
 table {
+    table-layout: fixed;
     margin-top: 50px;
     width: 90%;
     min-width: 900px;
