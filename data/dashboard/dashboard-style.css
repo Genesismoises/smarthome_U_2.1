@@ -155,6 +155,7 @@ body{
 
 .box:hover {
     transform: translateY(-5px);
+    cursor: pointer;
 
 }
 
@@ -198,6 +199,66 @@ td {
      border: 1px solid #C3C3C3;
 }
 
+
+.modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+#modal-graph {
+    background-color: grey;
+    width: 100%;        /* span entire modal width */
+    height: 100%;        /* half modal height (adjust as needed) */
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+
+
+.modal-content {
+    width: 60vw;       
+    max-width: 900px;
+    min-width: 600px;
+    height: 60vw;       
+    max-height: 900px;
+    min-height: 600px;
+    background: #fff;
+    border-radius: 50px;
+    padding: 16px;
+    position: relative;
+    animation: pop 0.2s ease-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#close-modal {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+#modal-title {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+
+@keyframes pop {
+    from { transform: scale(0.1); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
 
 
 
