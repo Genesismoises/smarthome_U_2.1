@@ -102,7 +102,7 @@ body{
     flex: 1;
     width: 100%;
     box-sizing: border-box;
-    padding: 40px;         /* ← equal spacing on all sides */
+    padding: 40px;         /* equal spacing on all sides */
     box-sizing: border-box;
      display: flex;
     flex-direction: column;
@@ -214,9 +214,8 @@ td {
 }
 
 #modal-graph {
-    background-color: grey;
     width: 100%;        /* span entire modal width */
-    height: 100%;        /* half modal height (adjust as needed) */
+    height: 100%;        /* half modal height */
     border-radius: 12px;
     margin-bottom: 16px;
 }
@@ -260,103 +259,17 @@ td {
     to { transform: scale(1); opacity: 1; }
 }
 
+#modal-graph {
+    width: 100%;
+    height: 100%;
+}
+
+#sensorChart {
+    width: 100%;
+    height: 100%;
+}
 
 
-
-@media(prefers-color-scheme: dark) {
-    body {
-        background-color: #23282e;
-        background-image:
-        radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
-        radial-gradient(circle at 40% 70%, #9b3d7d77, transparent 50%),
-        radial-gradient(circle at 10% 90%, #1d2b4f77, transparent 75%),
-        radial-gradient(circle at 75% 50%, #3e336b77, transparent 80%);
-
-    }
-
-    .box {
-        background-color: #322e40;
-        box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
-
-    }
-
-    #control-menu {
-        border: 1px solid #34364B;
-        background-color: #23282e;
-        background-image:
-        radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
-        radial-gradient(circle at 40% 70%, #9b3d7d77, transparent 50%),
-        radial-gradient(circle at 10% 90%, #1d2b4f77, transparent 75%),
-        radial-gradient(circle at 75% 50%, #3e336b77, transparent 80%);
-        height: 100vh;
-      
-    }
-
-
-    :root {
-        --control-menu-width: 25%; /* default width */
-    }
-    
-    #main-nav {
-        background-color: #282A3A;
-        color: #F4F4F4;
-        box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
-    }
-
-    #main-nav img, #control-nav img {
-        content: url('./images/control-white.png');
-    }      
-    
-    
-    
-    
-    table, td {
-         background-color: #282A3A;
-         color: #F4F4F4;
-         border: 1px solid black;
-        box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
-    }
-
-    #heading {
-        color: #F4F4F4;
-    }
-
-    #temperature {
-        content: url('./images/temperature-blue.png');
-    }
-
-     #humidity {
-        content: url('./images/humidity-light.png');
-    }
-
-    #sound {
-        content: url('./images/sound-light.png');
-    }
-
-    #light {
-        content: url('./images/light-yellow.png');
-    }
-
-    #control-menu, 
-    #control-menu * {
-        color: white;
-    }
-    
-    #control-menu .toggle-container span {
-        color: white;
-    }
-
-    #sensor-readings-content .box p, .column {
-        color: #F4F4F4;
-    }
-    .column-header {
-        color: white
-    
-    }
-    footer {
-        color: white;
-    }
-} 
 
 
 .box-content {
@@ -520,7 +433,6 @@ footer hr {
 
 .footer-subtitle {
     font-size: 0.75em;
-    color: #555;
 }
 
 .footer-column {
@@ -617,3 +529,104 @@ footer hr {
     
         
 }
+
+
+@media(prefers-color-scheme: dark) {
+    body {
+        background-color: #23282e;
+        background-image:
+        radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
+        radial-gradient(circle at 40% 70%, #9b3d7d77, transparent 50%),
+        radial-gradient(circle at 10% 90%, #1d2b4f77, transparent 75%),
+        radial-gradient(circle at 75% 50%, #3e336b77, transparent 80%);
+
+    }
+
+    .box {
+        background-color: #322e40;
+        box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
+
+    }
+
+    #control-menu {
+        border: 1px solid #34364B;
+        background-color: #23282e;
+        background-image:
+        radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
+        radial-gradient(circle at 40% 70%, #9b3d7d77, transparent 50%),
+        radial-gradient(circle at 10% 90%, #1d2b4f77, transparent 75%),
+        radial-gradient(circle at 75% 50%, #3e336b77, transparent 80%);
+        height: 100vh;
+      
+    }
+
+
+    :root {
+        --control-menu-width: 25%; /* default width */
+    }
+    
+    #main-nav {
+        background-color: #282A3A;
+        color: #F4F4F4;
+        box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
+    }
+
+    #main-nav img, #control-nav img {
+        content: url('./images/control-white.png');
+    }      
+    
+    
+    
+    
+    table, td {
+         background-color: #282A3A;
+         color: #F4F4F4;
+         border: 1px solid black;
+        box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
+    }
+
+    #heading {
+        color: #F4F4F4;
+    }
+
+    #temperature {
+        content: url('./images/temperature-blue.png');
+    }
+
+     #humidity {
+        content: url('./images/humidity-light.png');
+    }
+
+    #sound {
+        content: url('./images/sound-light.png');
+    }
+
+    #light {
+        content: url('./images/light-yellow.png');
+    }
+
+    #control-menu, 
+    #control-menu * {
+        color: white;
+    }
+    
+    #control-menu .toggle-container span {
+        color: white;
+    }
+
+    #sensor-readings-content .box p, .column {
+        color: #F4F4F4;
+    }
+    .column-header {
+        color: white
+    
+    }
+    footer {
+        color: white;
+    }
+
+    #footer-logo {
+        content: url('./images/logo-white.png');
+
+    }
+} 

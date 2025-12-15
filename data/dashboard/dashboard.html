@@ -4,6 +4,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=0.5">
         <title>Dashboard</title>
         <link rel="stylesheet" href="dashboard-style.css">
+        <!-- Chart.js (online) -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
     </head>
     <body>
         <nav id="main-nav">
@@ -112,20 +116,13 @@
                             <td id="door-status"></td>
                         </tr>
 
-                        <tr>
-                            <td rowspan="3">Lights <br><br>Room1<br><br>Room2</td>
-                            <td>----</td>
-                        </tr>
-
                         <tr id="room1">
-            
+                            <td>Room 1 Lights</td>
                             <td id="room1State"></td>
-                            
-                      
                         </tr>
 
                         <tr>
-                      
+                            <td>Room 2 Lights</td>
                            <td id="room2State"></td>
                         </tr>
 
@@ -193,7 +190,7 @@
                             <div class="box" sensor-data="sound">
                                 <div class="box-content">
                                     <img src="./images/sound-dark.png" alt="sound-icon" id="sound">
-                                    <p id="sound-value">0.00 dB</p>
+                                    <p id="sound-value"></p>
                                 </div>
                                 <p>Sound Value</p>
                             </div>
@@ -202,30 +199,17 @@
                 </div>
 
             </div>
-                
-                <canvas>
-                </canvas> 
-
 
 
 
 
         <footer>
-            <!--
-            <div class="footer-bottom">
-                <img src="./images/cvsu-logo.png" alt="cvsu-logo">
-                <div class="footer-bottom-text">
-                    <p>Republic of the Philippines</p>
-                    <p>CAVITE STATE UNIVERSITY</p>
-                    <p>Carmona, Cavite</p>
-                </div>
-            </div>
-            <hr> -->
+         
 
             <div class="footer-content">
 
                 <div class="footer-logo">
-                    <img src="./images/logo-black.png" alt="logo">
+                    <img src="./images/logo-black.png" alt="logo" id="footer-logo">
                     <p>Integrated Smart Home Kineme</p>
                     <p class="footer-subtitle">Submitted in partial fulfillment of CPEN 85 & CPEN 101</p>
                      <p class="footer-subtitle">Cavite State University – Carmona Campus</p>
@@ -285,6 +269,7 @@
         </script>
 
         <script>
+                let lastDHTSave = 0;
                 async function updateDHT() {
                     try {
                         const response = await fetch('/sensor-data');
@@ -294,7 +279,14 @@
             
 
                         document.getElementById('humid-value').innerText = (data.humidity !== undefined ? data.humidity.toFixed(2) : '--') + ' %';
-                
+                        const now = Date.now();
+                        if (now - lastDHTSave >= 10000) {
+                            pushValue('temperature', data.temperature);
+                            pushValue('humidity', data.humidity);
+                            lastDHTSave = now;
+
+                            if (chart) chart.update();
+                        }
                         
                     } catch (error) {
                         console.error('Error fetching sensor data:', error);
@@ -308,6 +300,9 @@
 
                         document.getElementById('sound-value').innerText = (data.sound !== undefined ? data.sound : '--');
                         document.getElementById('soundSenStatus').innerText = data.clapDetected || '--';
+                        pushValue('sound', Number(data.sound)); //for graph
+                        if (chart) chart.update();
+
      
 
                     }
@@ -336,6 +331,9 @@
                 // Update the <p id="light-value">
                 document.getElementById('light-value').innerText = 
                 (data.light !== undefined ? data.light : '--') + ' Lx';
+                pushValue('light', data.light);
+                if (chart) chart.update();
+
 
 
                 } 
@@ -437,13 +435,7 @@
             });
             doorStatus.innerText = doorControl.checked ? 'OPEN' : 'CLOSED';
 
-             
-
-
-
         </script>
-
-        
 
 
             <!-- Modal -->
@@ -452,34 +444,111 @@
                 <span id="close-modal">&times;</span>
                 <h2 id="modal-title">Sensor Data</h2>
                 <div id="modal-graph">
+                    <canvas id="sensorChart"></canvas>
                     <!-- Graph will go here later -->
                 </div>
             </div>
         </div>
 
         <script>
-    const boxes = document.querySelectorAll('.box');
-    const modal = document.getElementById('sensor-modal');
-    const closeModal = document.getElementById('close-modal');
-    const modalTitle = document.getElementById('modal-title');
+            const boxes = document.querySelectorAll('.box');
+            const modal = document.getElementById('sensor-modal');
+            const closeModal = document.getElementById('close-modal');
+            const modalTitle = document.getElementById('modal-title');
 
-    boxes.forEach(box => {
-        box.addEventListener('click', () => {
-            const sensor = box.getAttribute('sensor-data');
-            modalTitle.innerText = sensor.charAt(0).toUpperCase() + sensor.slice(1) + " Data";
-            modal.classList.remove('hidden');
-        });
-    });
+            boxes.forEach(box => {
+                box.addEventListener('click', () => {
+                    const sensor = box.getAttribute('sensor-data');
+                    modalTitle.innerText = sensor.charAt(0).toUpperCase() + sensor.slice(1) + " Data";
+                    modal.classList.remove('hidden');
+                    createChart(sensor);
+                });
+            });
 
-    closeModal.addEventListener('click', () => {
-        modal.classList.add('hidden');
-    });
+            closeModal.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
 
-    // Optional: close modal when clicking outside content
-    modal.addEventListener('click', (e) => {
-        if(e.target === modal) modal.classList.add('hidden');
-    });
+            //close modal when clicking outside content
+            modal.addEventListener('click', (e) => {
+                if(e.target === modal) modal.classList.add('hidden');
+            });
+        </script>
+
+        <!--history buffer-->
+
+        <script>
+            const history = {
+                temperature: [],
+                humidity: [],
+                light: [],
+                sound: []
+            };
+
+            const MAX_POINTS = {
+                temperature: 30, 
+                humidity: 30,
+                light: 50,
+                sound: 50
+            };
+
+            function pushValue(sensor, value) {
+                if (value === undefined || isNaN(value)) return;
+
+                history[sensor].push({
+                    x: new Date(),
+                    y: value
+                });
+
+                if (history[sensor].length > MAX_POINTS[sensor]) {
+                    history[sensor].shift();
+                }
+            }
+
+            
+        </script>
+
+        <script>
+            let chart;
+
+            function createChart(sensor) {
+                const ctx = document.getElementById('sensorChart').getContext('2d');
+
+                if (chart) chart.destroy();
+
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            label: sensor.toUpperCase(),
+                            data: history[sensor],
+                            borderWidth: 2,
+                            tension: 0.3,
+                            pointRadius: 2,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: false,
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: sensor === 'temperature' || sensor === 'humidity' ? 'minute' : 'second'
+                                }
+                            },
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
 </script>
+
+
 
 
 
