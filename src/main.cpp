@@ -9,7 +9,7 @@
 #include <Wire.h>
 #include <LiquidCrystal_PCF8574.h>
 
-#define DHTPIN 2
+#define DHTPIN 15
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHT22);
 
@@ -207,11 +207,7 @@ void setup() {
 
     // ===== Sensor endpoint =====
   server.on("/sensor-data", HTTP_GET, [](AsyncWebServerRequest *request){
-    if (millis() - lastRead > 2000) { // Read DHT22 output every 2 seconds
-        lastTemp = dht.readTemperature();
-        lastHum = dht.readHumidity();
-        lastRead = millis();
-    }
+    
    
 
     // Handle sensor read errors
@@ -344,13 +340,20 @@ server.on("/room2", HTTP_GET, [](AsyncWebServerRequest *request){
 void loop() {
     unsigned long now = millis();
 
+
+    if (millis() - lastRead > 2000) { // Read DHT22 output every 2 seconds
+        lastTemp = dht.readTemperature();
+        lastHum = dht.readHumidity();
+        lastRead = millis();
+    }       
+
     // --- SOUND SENSOR + CLAP ---
     currentSoundValue = analogRead(soundPin);
 
     static unsigned long lastSoundPrint = 0;
     if (now - lastSoundPrint > 200) {
-        Serial.print("sound=");
-        Serial.println(currentSoundValue);
+        //Serial.print("sound=");
+        //Serial.println(currentSoundValue);
         lastSoundPrint = now;
     }
 
@@ -389,8 +392,8 @@ void loop() {
 
     static unsigned long lastLdrPrint = 0;
     if (now - lastLdrPrint > 200) {
-        Serial.print("LDR Value=");
-        Serial.println(currentLdrValue);
+        //Serial.print("LDR Value=");
+        //Serial.println(currentLdrValue);
         lastLdrPrint = now;
     }
 
@@ -446,4 +449,5 @@ void loop() {
             showDefaultScreen();
         }
     }
+    delay(1);
 }

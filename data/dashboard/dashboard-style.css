@@ -41,11 +41,12 @@ body{
 
 }
 
-.control-button {
+.control-button1, .control-button2 {
     height: 100px;
     width: auto;
     cursor: pointer;
-   
+    border-radius: 50%;
+    transition: transform 0.5s ease;
 }
 
 #control-menu {
@@ -133,7 +134,7 @@ body{
 
 .box {
     background-color: #FAFAFA;
-    box-shadow: 8px 8px 16px #C3C3C3, -8px -8px 16px #FFFFFF ;
+    box-shadow: 8px 8px 16px #C3C3C3, -8px -8px 16px #C3C3C3 ;
     color: #333333;
     border-radius: 50px;
     margin: 20px;
@@ -189,14 +190,14 @@ table {
     overflow: hidden;
     font-size: 2em;
     background-color: #FAFAFA;
-    box-shadow: 8px 8px 16px #C3C3C3, -8px -8px 16px #FFFFFF ;
+    box-shadow: 8px 8px 16px #C3C3C3, -8px -8px 16px #C3C3C3 ;
 }
 
 td {
     border: 1px solid;
     background-color: #FAFAFA;
     text-align: center;
-     border: 1px solid #C3C3C3;
+    border: 1px solid #C3C3C3;
 }
 
 
@@ -531,103 +532,140 @@ footer hr {
 }
 
 
-    body.dark-mode {
-        background-color: #23282e;
-        background-image:
-        radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
-        radial-gradient(circle at 40% 70%, #9b3d7d77, transparent 50%),
-        radial-gradient(circle at 10% 90%, #1d2b4f77, transparent 75%),
-        radial-gradient(circle at 75% 50%, #3e336b77, transparent 80%);
+body.dark-mode {
+    background-color: #23282e;
+    background-image:
+    radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
+    radial-gradient(circle at 40% 70%, #9b3d7d77, transparent 50%),
+    radial-gradient(circle at 10% 90%, #1d2b4f77, transparent 75%),
+    radial-gradient(circle at 75% 50%, #3e336b77, transparent 80%);
 
-    }
+}
 
-    body.dark-mode .box {
-        background-color: #322e40;
-        box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
+body.dark-mode .box {
+    background-color: #322e40;
+    box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
 
-    }
+}
 
-    body.dark-mode #control-menu {
-        border: 1px solid #34364B;
-        background-color: #23282e;
-        background-image:
-        radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
-        radial-gradient(circle at 40% 70%, #9b3d7d77, transparent 50%),
-        radial-gradient(circle at 10% 90%, #1d2b4f77, transparent 75%),
-        radial-gradient(circle at 75% 50%, #3e336b77, transparent 80%);
-        height: 100vh;
-      
-    }
-
-
-    body.dark-mode :root {
-        --control-menu-width: 25%; /* default width */
-    }
+body.dark-mode #control-menu {
+    border: 1px solid #34364B;
+    background-color: #23282e;
+    background-image:
+    radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
+    radial-gradient(circle at 40% 70%, #9b3d7d77, transparent 50%),
+    radial-gradient(circle at 10% 90%, #1d2b4f77, transparent 75%),
+    radial-gradient(circle at 75% 50%, #3e336b77, transparent 80%);
+    height: 100vh;
     
-    body.dark-mode #main-nav {
+}
+
+
+body.dark-mode :root {
+    --control-menu-width: 25%; /* default width */
+}
+
+body.dark-mode #main-nav {
+    background-color: #282A3A;
+    color: #F4F4F4;
+    box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
+}
+
+body.dark-mode #main-nav img, body.dark-mode #control-nav img {
+    content: url('./images/control-white.png');
+}      
+
+
+
+
+body.dark-mode table, body.dark-mode td {
         background-color: #282A3A;
         color: #F4F4F4;
-        box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
-    }
+        border: 1px solid black;
+    box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
+}
 
-    body.dark-mode #main-nav img, body.dark-mode #control-nav img {
-        content: url('./images/control-white.png');
-    }      
+body.dark-mode #heading {
+    color: #F4F4F4;
+}
+
+body.dark-mode #temperature {
+    content: url('./images/temperature-blue.png');
+}
+
+body.dark-mode #humidity {
+    content: url('./images/humidity-light.png');
+}
+
+body.dark-mode #sound {
+    content: url('./images/sound-light.png');
+}
+
+body.dark-mode #light {
+    content: url('./images/light-yellow.png');
+}
+
+body.dark-mode #control-menu, 
+body.dark-mode #control-menu * {
+    color: white;
+}
+
+body.dark-mode #control-menu .toggle-container span {
+    color: white;
+}
+
+body.dark-mode #sensor-readings-content .box p, body.dark-mode .column {
+    color: #F4F4F4;
+}
+
+body.dark-mode .column-header {
+    color: white
+
+}
+
+body.dark-mode footer {
+    color: white;
+}
+
+body.dark-mode #footer-logo {
+    content: url('./images/logo-white.png');
+
+}
+
+/* Modal dark mode */
+body.dark-mode #sensor-modal {
+    color: #fff;
+}
+
+body.dark-mode #sensor-modal .modal-content {
+    background-color: #282A3A; /* inner box background */
+    color: #fff;
+    border: 1px solid #444; 
+    box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
+}
+
+body.dark-mode canvas {
+    background-color: #322e40 !important; /* canvas background */
+    border-radius: 10px;
+
     
-    
-    
-    
-    body.dark-mode table, body.dark-mode td {
-         background-color: #282A3A;
-         color: #F4F4F4;
-         border: 1px solid black;
-        box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
-    }
+}
 
-    body.dark-mode #heading {
-        color: #F4F4F4;
-    }
+body.dark-mode .chartjs-render-monitor {
+    color: #fff;
+}
 
-    body.dark-mode #temperature {
-        content: url('./images/temperature-blue.png');
-    }
 
-    body.dark-mode #humidity {
-        content: url('./images/humidity-light.png');
-    }
+body.dark-mode .chartjs-size-monitor,
+body.dark-mode .chartjs-render-monitor,
+body.dark-mode .chartjs-tooltip {
+    background-color: transparent !important;
+}
 
-    body.dark-mode #sound {
-        content: url('./images/sound-light.png');
-    }
-
-    body.dark-mode #light {
-        content: url('./images/light-yellow.png');
-    }
-
-    body.dark-mode #control-menu, 
-    body.dark-mode #control-menu * {
-        color: white;
-    }
-    
-    body.dark-mode #control-menu .toggle-container span {
-        color: white;
-    }
-
-    body.dark-mode #sensor-readings-content .box p, body.dark-mode .column {
-        color: #F4F4F4;
-    }
-    body.dark-mode .column-header {
-        color: white
-    
-    }
-    body.dark-mode footer {
-        color: white;
-    }
-
-    body.dark-mode #footer-logo {
-        content: url('./images/logo-white.png');
-
-    }
+#sensor-modal .modal-content { 
+    border: 1px solid #C3C3C3; 
+     box-shadow: 8px 8px 16px #C3C3C3, -8px -8px 16px #C3C3C3 ;
+}
 
 #top-darkmode-switch {
     margin-left: auto;  
@@ -650,3 +688,4 @@ footer hr {
     content: "🌙"; 
     color: #fff;
 }
+

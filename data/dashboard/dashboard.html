@@ -13,7 +13,7 @@
     
     <body>
         <nav id="main-nav">
-            <img src="./images/control-black.png" alt="control" class="control-button">
+            <img src="./images/control-black.png" alt="control" class="control-button1">
 
         </nav>
 
@@ -22,7 +22,7 @@
         <div id="control-menu">
                 
             <nav id="control-nav">
-                <img src="./images/control-black.png" alt="control" class="control-button">
+                <img src="./images/control-black.png" alt="control" class="control-button2">
 
                 <label class="switch" id="top-darkmode-switch">
                     <input type="checkbox" id="darkModeToggle">
@@ -254,24 +254,47 @@
 
         <script>
             const panel = document.getElementById("control-menu");
-            const buttons = document.querySelectorAll(".control-button");
+            const button1 = document.querySelector(".control-button1");
+            const button2 = document.querySelector(".control-button2");
 
             // Function to get the current control menu width from CSS variable
             function getMenuWidth() {
             return getComputedStyle(document.documentElement).getPropertyValue('--control-menu-width') || '25%';
             }
 
-            buttons.forEach(btn => {
-                btn.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                 // Toggle panel width using the variable
-                    panel.style.width = panel.style.width === getMenuWidth() ? "0" : getMenuWidth();
-                });
+            function openPanel() {
+                panel.style.width = getMenuWidth();
+                button2.style.transform = "rotate(270deg)";
+                button1.style.transform = "rotate(270deg)";
+            }
+
+            function closePanel() {
+                panel.style.width = "0";
+                button2.style.transform = "rotate(0deg)";
+                button1.style.transform = "rotate(0deg)"; // rotate back when closing
+            }
+
+            button1.addEventListener("click", (e) => {
+                e.stopPropagation();
+                if (panel.style.width === getMenuWidth()) {
+                    closePanel();
+                } else {
+                    openPanel();
+                }
             });
+
+            // Toggle panel when button2 clicked
+            button2.addEventListener("click", (e) => {
+                e.stopPropagation();
+                closePanel();
+            });
+
 
             document.addEventListener("click", (e) => {
                 if (!panel.contains(e.target) && panel.style.width === getMenuWidth()) {
                     panel.style.width = "0";
+                    button2.style.transform = "rotate(0deg)";
+                    button1.style.transform = "rotate(0deg)";
                 }
             });
         </script>
@@ -453,7 +476,7 @@
                 <h2 id="modal-title">Sensor Data</h2>
                 <div id="modal-graph">
                     <canvas id="sensorChart"></canvas>
-                    <!-- Graph will go here later -->
+                    
                 </div>
             </div>
         </div>
@@ -523,6 +546,7 @@
                 const ctx = document.getElementById('sensorChart').getContext('2d');
 
                 if (chart) chart.destroy();
+                const isDarkMode = document.body.classList.contains('dark-mode');
 
                 chart = new Chart(ctx, {
                     type: 'line',
@@ -533,23 +557,48 @@
                             borderWidth: 2,
                             tension: 0.3,
                             pointRadius: 2,
-                            fill: false
+                            fill: false,
+                            borderColor: isDarkMode ? 'white' : 'black', // line color
+                            backgroundColor: isDarkMode ? 'white' : 'black', // point color
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         animation: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: isDarkMode ? 'white' : 'black' // legend text color
+                                }
+                            }
+                        },
                         scales: {
                             x: {
                                 type: 'time',
                                 time: {
                                     unit: sensor === 'temperature' || sensor === 'humidity' ? 'minute' : 'second'
+                                },
+                                ticks: {
+                                    color: isDarkMode ? 'white' : 'black' // x-axis labels
+                                },
+                                grid: {
+                                    color: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)' // grid lines
                                 }
                             },
+
+
                             y: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                ticks: {
+                                    color: isDarkMode ? 'white' : 'black' // y-axis labels
+                                },
+                                grid: {
+                                    drawTicks: true,
+                                    color: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)' // grid lines
+                                }
                             }
+
                         }
                     }
                 });
