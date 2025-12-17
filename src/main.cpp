@@ -6,10 +6,15 @@
 #include "DHT.h"
 #include <ESP32Servo.h>
 #include <ArduinoJson.h>
+#include <Wire.h>
+#include <LiquidCrystal_PCF8574.h>
 
 #define DHTPIN 2
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHT22);
+
+#define TRIG_PIN 17 //for ultrasoninc
+#define ECHO_PIN 16
 
 // Variables to store last readings of DHT22
 unsigned long lastRead = 0;
@@ -40,13 +45,23 @@ bool clapDetected = false;  // flag for clap detector in dashboard
 const int ldrPin = 33;        
 const int ldrLed1 = 19;
 const int ldrLed2 = 5;
-const int ldrLed3 = 16;
+const int ldrLed3 = 4;
 int ldrThreshold = 2000;       
 int currentLdrValue = 0;       // <- will be sent to dashboard
 
 /// states for manual led controls
 bool ldrSwitchState = false;   // Last commanded state for Room 1 (checkbox)
 bool soundSwitchState = false; // Last commanded state for Room 2 (checkbox)
+
+
+// LCD variables
+bool showingGreeting = false;
+unsigned long greetingStart = 0;
+LiquidCrystal_PCF8574 lcd(0x27);
+
+// Ultrasonic variables
+unsigned long lastUltrasonicRead = 0;
+float lastDistance = -1;
 
 
 
@@ -64,6 +79,46 @@ AsyncWebServer server(80);
 // Handle 404
 void notFound(AsyncWebServerRequest *request) {
     request->send(404, "text/plain", "Not found");
+}
+
+float getDistanceCM() {
+    digitalWrite(TRIG_PIN, LOW);
+    delayMicroseconds(2);
+    digitalWrite(TRIG_PIN, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(TRIG_PIN, LOW);
+    
+    long duration = pulseIn(ECHO_PIN, HIGH, 80000); // 30ms timeout
+    if (duration == 0) return -1; // No echo received
+    
+    float distance = duration * 0.034 / 2;
+    return distance;
+}
+
+void showGreetingScreen() {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print(" [GREETINGS]");
+    lcd.setCursor(0, 1);
+    lcd.print(" Welcome Kuya!");
+}
+
+void showDefaultScreen() {
+    
+    // Line 1: Room LED status
+    lcd.setCursor(0, 0);
+    lcd.print("R1:");
+    lcd.print(digitalRead(ldrLed1) ? "ON " : "OFF");
+    lcd.print(" R2:");
+    lcd.print(digitalRead(led1) ? "ON" : "OFF");
+    
+    // Line 2: Temperature & Humidity
+    lcd.setCursor(0, 1);
+    lcd.print("T:");
+    lcd.print(lastTemp, 1);
+    lcd.print("C H:");
+    lcd.print(lastHum, 1);
+    lcd.print("%");
 }
 
 void setup() {
@@ -90,12 +145,28 @@ void setup() {
 
     Serial.println(">>> LDR Loaded <<<");
 
+    // Ultrasonic sensor
+    pinMode(TRIG_PIN, OUTPUT);
+    pinMode(ECHO_PIN, INPUT);
+
+    Serial.println(">>> Ultrasonic Loaded <<<");
+
     // DHT22
     dht.begin(); //start DHT sensor
     doorServo.setPeriodHertz(50);      
     doorServo.attach(servoPin, 500, 2400);  
     doorServo.write(0);                 // Initialize to closed
     delay(300);
+
+    // Initialize LCD
+    Wire.begin();
+    lcd.begin(16, 2);
+    lcd.setBacklight(255);
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("System Ready");
+    delay(1000);
+    lcd.clear();
 
 
 
@@ -107,9 +178,9 @@ void setup() {
     Serial.println("Mounting LittleFS...");
     if (!LittleFS.begin(false)) { // false = means do not format if mount fails
     Serial.println("LittleFS mount failed!");
-} else {
+    } else {
     Serial.println("LittleFS mounted successfully.");
-}
+    }
 
 
     // --- Connect to WiFi ---
@@ -268,7 +339,9 @@ server.on("/room2", HTTP_GET, [](AsyncWebServerRequest *request){
 
 
   
-}void loop() {
+}
+
+void loop() {
     unsigned long now = millis();
 
     // --- SOUND SENSOR + CLAP ---
@@ -326,4 +399,51 @@ server.on("/room2", HTTP_GET, [](AsyncWebServerRequest *request){
     digitalWrite(ldrLed1, finalLdrState);
     digitalWrite(ldrLed2, finalLdrState);
     digitalWrite(ldrLed3, finalLdrState);
+
+    // --- ULTRASONIC + LCD ---
+    // Read ultrasonic sensor every 150ms to avoid blocking
+    if (now - lastUltrasonicRead >= 500) {
+        lastUltrasonicRead = now;
+        lastDistance = getDistanceCM();
+        
+        if (lastDistance > 0) {
+            Serial.print("Distance: ");
+            Serial.print(lastDistance);
+            Serial.println(" cm");
+        }
+    }
+    
+    // Greeting trigger
+    if (lastDistance > 0 && lastDistance < 10 && !showingGreeting) {
+        showingGreeting = true;
+        greetingStart = millis();
+        showGreetingScreen();
+    }
+    
+    // Handle greeting display
+    if (showingGreeting) {
+        if (millis() - greetingStart >= 5000) {
+            showingGreeting = false;
+            lcd.clear();
+            showDefaultScreen(); 
+        }
+    } else {
+        // Update default screen every 3 seconds
+        static unsigned long lastLCDUpdate = 0;
+        if (millis() - lastLCDUpdate >= 5000) {
+            lastLCDUpdate = millis();
+            
+            // Update DHT readings for LCD
+            if (millis() - lastRead > 2000) {
+                lastTemp = dht.readTemperature();
+                lastHum = dht.readHumidity();
+                lastRead = millis();
+                
+                if (isnan(lastTemp)) lastTemp = 0.00;
+                if (isnan(lastHum)) lastHum = 0.00;
+            }
+            
+            showDefaultScreen();
+        }
+    }
 }

@@ -9,9 +9,12 @@
         <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
     </head>
+
+    
     <body>
         <nav id="main-nav">
             <img src="./images/control-black.png" alt="control" class="control-button">
+
         </nav>
 
 
@@ -20,6 +23,11 @@
                 
             <nav id="control-nav">
                 <img src="./images/control-black.png" alt="control" class="control-button">
+
+                <label class="switch" id="top-darkmode-switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider"></span>
+                </label>
             </nav>
 
             <div class="control-content">
@@ -547,6 +555,30 @@
                 });
             }
 </script>
+
+    <script>
+
+        const toggle = document.getElementById("darkModeToggle");
+
+ 
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark-mode");
+            toggle.checked = true;
+        }
+
+        toggle.addEventListener("change", () => {
+            if (toggle.checked) {
+                document.body.classList.add("dark-mode");
+                localStorage.setItem("theme", "dark");
+            } else {
+                document.body.classList.remove("dark-mode");
+                localStorage.setItem("theme", "light");
+            }
+        });
+
+     
+
+    </script>
 
 
 

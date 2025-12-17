@@ -531,8 +531,7 @@ footer hr {
 }
 
 
-@media(prefers-color-scheme: dark) {
-    body {
+    body.dark-mode {
         background-color: #23282e;
         background-image:
         radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
@@ -542,13 +541,13 @@ footer hr {
 
     }
 
-    .box {
+    body.dark-mode .box {
         background-color: #322e40;
         box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
 
     }
 
-    #control-menu {
+    body.dark-mode #control-menu {
         border: 1px solid #34364B;
         background-color: #23282e;
         background-image:
@@ -561,72 +560,93 @@ footer hr {
     }
 
 
-    :root {
+    body.dark-mode :root {
         --control-menu-width: 25%; /* default width */
     }
     
-    #main-nav {
+    body.dark-mode #main-nav {
         background-color: #282A3A;
         color: #F4F4F4;
         box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
     }
 
-    #main-nav img, #control-nav img {
+    body.dark-mode #main-nav img, body.dark-mode #control-nav img {
         content: url('./images/control-white.png');
     }      
     
     
     
     
-    table, td {
+    body.dark-mode table, body.dark-mode td {
          background-color: #282A3A;
          color: #F4F4F4;
          border: 1px solid black;
         box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
     }
 
-    #heading {
+    body.dark-mode #heading {
         color: #F4F4F4;
     }
 
-    #temperature {
+    body.dark-mode #temperature {
         content: url('./images/temperature-blue.png');
     }
 
-     #humidity {
+    body.dark-mode #humidity {
         content: url('./images/humidity-light.png');
     }
 
-    #sound {
+    body.dark-mode #sound {
         content: url('./images/sound-light.png');
     }
 
-    #light {
+    body.dark-mode #light {
         content: url('./images/light-yellow.png');
     }
 
-    #control-menu, 
-    #control-menu * {
+    body.dark-mode #control-menu, 
+    body.dark-mode #control-menu * {
         color: white;
     }
     
-    #control-menu .toggle-container span {
+    body.dark-mode #control-menu .toggle-container span {
         color: white;
     }
 
-    #sensor-readings-content .box p, .column {
+    body.dark-mode #sensor-readings-content .box p, body.dark-mode .column {
         color: #F4F4F4;
     }
-    .column-header {
+    body.dark-mode .column-header {
         color: white
     
     }
-    footer {
+    body.dark-mode footer {
         color: white;
     }
 
-    #footer-logo {
+    body.dark-mode #footer-logo {
         content: url('./images/logo-white.png');
 
     }
-} 
+
+#top-darkmode-switch {
+    margin-left: auto;  
+    padding-left: 5px;  
+    margin-right: 20px;
+ 
+}
+
+
+#darkModeToggle + .slider:before {
+    content: "🌞"; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    color: #333;
+}
+
+#darkModeToggle:checked + .slider:before {
+    content: "🌙"; 
+    color: #fff;
+}
