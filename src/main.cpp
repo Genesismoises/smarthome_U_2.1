@@ -32,7 +32,7 @@ const int led1 = 14;
 const int led2 = 27;
 const int led3 = 13;
 
-int threshold = 1000;
+int threshold = 600;
 unsigned long clapTimeout = 800;
 unsigned long lastClapTime = 0;
 int clapCount = 0;
@@ -416,11 +416,11 @@ void loop() {
         lastUltrasonicRead = now;
         lastDistance = getDistanceCM();
         
-        if (lastDistance > 0) {
+        /*if (lastDistance > 0) {
             Serial.print("Distance: ");
             Serial.print(lastDistance);
             Serial.println(" cm");
-        }
+        }*/
     }
     
     // Greeting trigger

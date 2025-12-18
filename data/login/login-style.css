@@ -78,3 +78,29 @@ input[type="submit"]{
         content: url('./images/user-icon-white.png');
     }
 }
+
+@media (max-width: 800px) {
+     input[type="password"] {
+      width: 500px;
+      padding: 18px;
+      border-radius: 16px;
+      font-size: 1.1em;
+  }
+
+  input[type="submit"] {
+      max-width: 200px;
+      height: 60px;
+      margin: 15px;
+      font-size: 1.2em;
+      border-radius: 60px;
+  }
+  
+  img {
+    width: 200px;
+    height: auto;
+  }
+
+  #error-message {
+    font-size: 1.3em;
+}
+}

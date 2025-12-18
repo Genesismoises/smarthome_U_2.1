@@ -12,8 +12,9 @@
 
         <form onsubmit="checkPassword(event)">
             <input type="password" id="password" placeholder="Enter password" >
-            <input type="submit" onclick="checkPassword()" value="LOGIN">
             <div id="error-message"></div>
+            <input type="submit" onclick="checkPassword()" value="LOGIN">
+            
         </form>
 
 
@@ -32,7 +33,7 @@
                 }
 
                 else {
-                    errorDiv.textContent = "Incorrect password";
+                    errorDiv.textContent = "Incorrect password. Try again.";
                 }
             }
 
