@@ -9,6 +9,32 @@
 #include <Wire.h>
 #include <LiquidCrystal_PCF8574.h>
 
+// ===== Door + Touch System =====
+bool doorOpen = false;
+unsigned long touchStartTime = 0;
+unsigned long doorOpenTime = 0;
+int failedAttempts = 0;
+
+// Buzzer state machine
+bool buzzerActive = false;
+int buzzerBeepCount = 0;
+unsigned long buzzerLastToggle = 0;
+bool buzzerState = false;
+
+#define HOLD_TIME 3000
+#define MAX_FAILED_TRIES 3
+#define MAX_DOOR_OPEN_TIME 10000
+#define TOUCH1_PIN 23
+#define TOUCH2_PIN 4
+#define DOOR_LED1_PIN   25
+#define DOOR_LED2_PIN   26
+#define BUZZER_PIN 12
+#define SERVO_PIN  18
+
+#define BUZZER_ON  LOW
+#define BUZZER_OFF HIGH
+
+
 #define DHTPIN 15
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHT22);
@@ -32,7 +58,7 @@ const int led1 = 14;
 const int led2 = 27;
 const int led3 = 13;
 
-int threshold = 600;
+int threshold = 1500;
 unsigned long clapTimeout = 800;
 unsigned long lastClapTime = 0;
 int clapCount = 0;
@@ -45,7 +71,7 @@ bool clapDetected = false;  // flag for clap detector in dashboard
 const int ldrPin = 33;        
 const int ldrLed1 = 19;
 const int ldrLed2 = 5;
-const int ldrLed3 = 4;
+const int ldrLed3 = 2;
 int ldrThreshold = 2000;       
 int currentLdrValue = 0;       // <- will be sent to dashboard
 
@@ -92,6 +118,66 @@ float getDistanceCM() {
     return distance;
 }
 
+void updateBuzzer() { //BUZZERRRRRRRRRRRRRRRRRRRRRRRRRRRR
+  if (!buzzerActive) return;
+
+  unsigned long now = millis();
+
+  if (now - buzzerLastToggle >= 200) {
+    buzzerLastToggle = now;
+    buzzerState = !buzzerState;
+    digitalWrite(BUZZER_PIN, buzzerState ? BUZZER_ON : BUZZER_OFF);
+
+    if (!buzzerState) {
+      buzzerBeepCount--;
+      if (buzzerBeepCount <= 0) {
+        buzzerActive = false;
+        digitalWrite(BUZZER_PIN, BUZZER_OFF);
+      }
+    }
+  }
+}
+
+void buzzOpen() {
+  buzzerBeepCount = 1;
+  buzzerActive = true;
+  buzzerLastToggle = millis();
+}
+void buzzAlert() {
+  buzzerBeepCount = 3;
+  buzzerActive = true;
+  buzzerLastToggle = millis();
+}
+
+void openDoor() {
+  doorOpen = true;
+  failedAttempts = 0;
+  doorOpenTime = millis();
+
+  doorServo.write(180);
+  digitalWrite(DOOR_LED1_PIN, HIGH);
+  digitalWrite(DOOR_LED2_PIN, HIGH);
+
+  buzzOpen();
+}
+
+void closeDoor() {
+  doorOpen = false;
+
+  doorServo.write(0);
+  digitalWrite(DOOR_LED1_PIN, LOW);
+  digitalWrite(DOOR_LED2_PIN, LOW);
+}
+
+void intruderAlert() {
+  digitalWrite(DOOR_LED1_PIN, LOW);
+  digitalWrite(DOOR_LED2_PIN, LOW);
+  buzzAlert();
+}
+
+
+
+
 void showGreetingScreen() {
     lcd.clear();
     lcd.setCursor(0, 0);
@@ -123,6 +209,14 @@ void setup() {
     delay(500);
 
     // -- initialize sensors and actuators --
+
+    pinMode(TOUCH1_PIN, INPUT);
+    pinMode(TOUCH2_PIN, INPUT);
+    pinMode(DOOR_LED1_PIN, OUTPUT);
+    pinMode(DOOR_LED2_PIN, OUTPUT);
+    pinMode(BUZZER_PIN, OUTPUT);
+    digitalWrite(BUZZER_PIN, BUZZER_OFF);
+
 
     // Sound + LEDs
     pinMode(led1, OUTPUT);
@@ -453,5 +547,44 @@ void loop() {
             showDefaultScreen();
         }
     }
+
+        // ===== Door Touch Logic =====
+    bool touch1 = digitalRead(TOUCH1_PIN);
+    bool touch2 = digitalRead(TOUCH2_PIN);
+
+    if (touch1 || touch2) {
+    if (touchStartTime == 0) {
+        touchStartTime = millis();
+    }
+
+    if (touch1 && touch2 &&
+        !doorOpen &&
+        millis() - touchStartTime >= HOLD_TIME) {
+        openDoor();
+    }
+    } else {
+    if (touchStartTime != 0 &&
+        !doorOpen &&
+        millis() - touchStartTime < HOLD_TIME) {
+        failedAttempts++;
+        Serial.println("Failed Attempt: " + String(failedAttempts));
+    }
+
+    touchStartTime = 0;
+
+    if (failedAttempts >= MAX_FAILED_TRIES) {
+        buzzAlert();
+        failedAttempts = 0;
+    }
+    }
+
+    // Auto close
+    if (doorOpen && millis() - doorOpenTime >= MAX_DOOR_OPEN_TIME) {
+    closeDoor();
+    }
+
+    // Update buzzer (VERY IMPORTANT)
+    updateBuzzer();
+
     delay(1);
 }
