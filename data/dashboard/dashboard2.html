@@ -88,7 +88,7 @@
                     <h3>Buzzer</h3>
 
                     <div class="control-row">
-                        <span>Trigger Alarm</span>
+                        <span>Buzz</span>
                         <div class="toggle-container">
                             <span>OFF</span>
                             <label class="switch">
@@ -449,7 +449,7 @@
 
         <script>
              const doorControl = document.getElementById('door-control');
-             //const doorStatus = document.getElementById('door-status');
+             const doorStatus = document.getElementById('door-status');
             
              doorControl.addEventListener('change', async () => {
                 let state = doorControl.checked ? 'open' : 'close';
@@ -462,33 +462,26 @@
 
 
                 }
-                //doorStatus.innerText = state === 'open' ? 'OPEN' : 'CLOSED';
             });
-            //doorStatus.innerText = doorControl.checked ? 'OPEN' : 'CLOSED';
-
-        </script>
-
-        <script>
-            const doorStatus = document.getElementById('door-status');
-
+            
             async function updateDoorStatus() {
                 try {
                     const response = await fetch('/door-status');
                     const data = await response.json();
                     doorStatus.innerText = data.door;
-                    doorStatus.style.color = data.door === 'OPEN' ? 'green' : 'red';
+
+                    // Optional: update switch position based on actual door
+                    doorControl.checked = data.door === "OPEN";
+
                 } catch (error) {
                     console.error('Error fetching door status:', error);
-                    doorStatus.innerText = '--';
                 }
-                
             }
 
-            // Update every 500ms
-         
-            setInterval(updateDoorStatus, 500);
+            // Run every 200ms
+            setInterval(updateDoorStatus, 200);
             updateDoorStatus();
-            
+
 
         </script>
 

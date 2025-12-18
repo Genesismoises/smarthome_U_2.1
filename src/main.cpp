@@ -376,24 +376,33 @@ server.on("/room2", HTTP_GET, [](AsyncWebServerRequest *request){
 
 
 
-    // ===== Servo control endpoint =====
+// ===== Servo control endpoint =====
 
 
-  server.on("/door", HTTP_GET, [](AsyncWebServerRequest *request){
-        if(request->hasParam("state")){
-            String state = request->getParam("state")->value();
-            if(state == "open"){
-                doorServo.write(180); // Open door
-                Serial.println("Door opened (180°)");
-            } else {
-                doorServo.write(0);   // Close door
-                Serial.println("Door closed (0°)");
-            }
-            request->send(200, "text/plain", "Door moved: " + state);
+server.on("/door", HTTP_GET, [](AsyncWebServerRequest *request){
+    if(request->hasParam("state")){
+        String state = request->getParam("state")->value();
+        if(state == "open"){
+            doorServo.write(180); // Open door
+            doorOpen = true;
+            doorOpenTime = millis();
+            Serial.println("Door opened (180°)");
         } else {
-            request->send(400, "text/plain", "Missing state parameter");
+            doorServo.write(0);   // Close door
+            doorOpen = false;
+            Serial.println("Door closed (0°)");
         }
-    });
+        request->send(200, "text/plain", "Door moved: " + state);
+    } else {
+        request->send(400, "text/plain", "Missing state parameter");
+    }
+});
+
+server.on("/door-status", HTTP_GET, [](AsyncWebServerRequest *request){
+    String status = doorOpen ? "OPEN" : "CLOSED";
+    String json = "{\"door\":\"" + status + "\"}";
+    request->send(200, "application/json", json);
+});
 
 
 
