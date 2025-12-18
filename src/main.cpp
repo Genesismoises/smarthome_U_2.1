@@ -64,9 +64,6 @@ unsigned long lastUltrasonicRead = 0;
 float lastDistance = -1;
 
 
-
-
-
 // --- WiFi credentials ---
 const char* ssid = "Baldonasa Fam 2.4G";
 const char* password = "Borgoydabest_7";
