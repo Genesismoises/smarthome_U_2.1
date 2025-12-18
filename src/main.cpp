@@ -50,8 +50,8 @@ int ldrThreshold = 2000;
 int currentLdrValue = 0;       // <- will be sent to dashboard
 
 /// states for manual led controls
-bool ldrSwitchState = false;   // Last commanded state for Room 1 (checkbox)
-bool soundSwitchState = false; // Last commanded state for Room 2 (checkbox)
+int ldrMode = 0;  // 0 = auto mode, 1 = manual on, 2 = manua off
+int  soundMode = 0; 
 
 
 // LCD variables
@@ -88,7 +88,7 @@ float getDistanceCM() {
     delayMicroseconds(10);
     digitalWrite(TRIG_PIN, LOW);
     
-    long duration = pulseIn(ECHO_PIN, HIGH, 80000); // 30ms timeout
+    long duration = pulseIn(ECHO_PIN, HIGH, 30000); //30 ms 5 meters max distance
     if (duration == 0) return -1; // No echo received
     
     float distance = duration * 0.034 / 2;
@@ -258,13 +258,12 @@ server.on("/led-status", HTTP_GET, [](AsyncWebServerRequest *request){
 server.on("/room1", HTTP_GET, [](AsyncWebServerRequest *request){
     if(request->hasParam("state")){
         String state = request->getParam("state")->value();
-        ldrSwitchState = (state == "on");
-        // Immediately update LEDs
-        digitalWrite(ldrLed1, ldrSwitchState);
-        digitalWrite(ldrLed2, ldrSwitchState);
-        digitalWrite(ldrLed3, ldrSwitchState);
-        request->send(200, "text/plain", "Room1 set to " + state);
-    } else {
+        if (state == "on") ldrMode = 1;
+        else if (state == "off") ldrMode = 2;
+        else ldrMode = 0;
+         request->send(200, "text/plain", "Room1 updated");
+    } 
+    else {
         request->send(400, "text/plain", "Missing state parameter");
     }
 });
@@ -272,12 +271,11 @@ server.on("/room1", HTTP_GET, [](AsyncWebServerRequest *request){
 server.on("/room2", HTTP_GET, [](AsyncWebServerRequest *request){
     if(request->hasParam("state")){
         String state = request->getParam("state")->value();
-        soundSwitchState = (state == "on");
-        // Immediately update LEDs
-        digitalWrite(led1, soundSwitchState);
-        digitalWrite(led2, soundSwitchState);
-        digitalWrite(led3, soundSwitchState);
-        request->send(200, "text/plain", "Room2 set to " + state);
+        if (state == "on") soundMode = 1;
+        else if (state == "off") soundMode = 2;
+        else soundMode = 0;
+
+        request->send(200, "text/plain", "Room2 updated");
     } else {
         request->send(400, "text/plain", "Missing state parameter");
     }
@@ -340,7 +338,7 @@ server.on("/room2", HTTP_GET, [](AsyncWebServerRequest *request){
 void loop() {
     unsigned long now = millis();
 
-
+    //DHT
     if (millis() - lastRead > 2000) { // Read DHT22 output every 2 seconds
         lastTemp = dht.readTemperature();
         lastHum = dht.readHumidity();
@@ -377,11 +375,15 @@ void loop() {
     }
 
     bool sensorSoundState = ledState;
-    bool finalSoundState = soundSwitchState ? true : sensorSoundState; // switch overrides
+    bool finalSoundState;
+    if (soundMode == 1) finalSoundState = true;        // FORCE ON
+    else if (soundMode == 2) finalSoundState = false;  // FORCE OFF
+    else finalSoundState = sensorSoundState;           // AUTO
     digitalWrite(led1, finalSoundState);
     digitalWrite(led2, finalSoundState);
     digitalWrite(led3, finalSoundState);
     ledState = finalSoundState;
+
 
     if (now - lastClapTime > clapTimeout) {
         clapCount = 0;
@@ -398,10 +400,15 @@ void loop() {
     }
 
     bool sensorLdrState = currentLdrValue > ldrThreshold;
-    bool finalLdrState = ldrSwitchState ? true : sensorLdrState; // switch overrides
+    bool finalLdrState;
+    if (ldrMode == 1) finalLdrState = true;       // FORCE ON
+    else if (ldrMode == 2) finalLdrState = false; // FORCE OFF
+    else finalLdrState = sensorLdrState;          // AUTO
+
     digitalWrite(ldrLed1, finalLdrState);
     digitalWrite(ldrLed2, finalLdrState);
     digitalWrite(ldrLed3, finalLdrState);
+
 
     // --- ULTRASONIC + LCD ---
     // Read ultrasonic sensor every 150ms to avoid blocking
