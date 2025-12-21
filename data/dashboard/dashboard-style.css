@@ -662,6 +662,20 @@ body.dark-mode .chartjs-tooltip {
     background-color: transparent !important;
 }
 
+body.dark-mode .alert {
+    background: #282A3A;
+    border-radius: 12px;
+    color: white;
+    box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
+
+}
+
+body.dark-mode .alert-bar  {
+    background: white;
+    animation: alertProgress 4s linear forwards;
+}
+
+
 #sensor-modal .modal-content { 
     border: 1px solid #C3C3C3; 
      box-shadow: 8px 8px 16px #C3C3C3, -8px -8px 16px #C3C3C3 ;
@@ -676,7 +690,7 @@ body.dark-mode .chartjs-tooltip {
 
 
 #darkModeToggle + .slider:before {
-    content: "🌞"; 
+    content: "☀️"; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -686,6 +700,54 @@ body.dark-mode .chartjs-tooltip {
 
 #darkModeToggle:checked + .slider:before {
     content: "🌙"; 
-    color: #fff;
+    color: #333;
+    background-color: #23282e;
 }
+
+
+.alert {
+    position: fixed;
+    top: 20px;
+    left: -520px; /* hidden off-screen */
+    width: 500px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    overflow: hidden;
+    transition: left 0.5s cubic-bezier(0.65, -0.55, 0.255, 1.35);
+    z-index: 9999;
+}
+
+.alert.show {
+    left: 20px;
+}
+
+
+.alert-content {
+    padding: 16px 18px;
+}
+
+.alert-content strong {
+    color: #dc2626;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.alert-progress {
+    height: 4px;
+    background: #eee;
+}
+
+.alert-bar {
+    height: 100%;
+    width: 100%;
+    background: #23282e;
+    animation: alertProgress 4s linear forwards;
+}
+
+@keyframes alertProgress {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
 

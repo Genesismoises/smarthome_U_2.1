@@ -1,7 +1,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=0.5">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dashboard</title>
         <link rel="stylesheet" href="dashboard-style.css">
         <!-- Chart.js (online) -->
@@ -148,7 +148,7 @@
                             <td>Buzzer</td>
                             <td>OFF</td>
                         </tr>
-
+                        
                          <tr>
                             <td>Sound Sensor</td>
                             <td id="soundSenStatus"></td>
@@ -249,6 +249,17 @@
 
     
         </footer>
+
+        <div id="alert-notification" class="alert"> 
+            <div class="alert-content">
+                <strong>⚠️ SECURITY ALERT</strong>
+                <p>Multiple failed door attempts detected.</p>
+                </div>
+                <div class="alert-progress">
+                <div class="alert-bar"></div>
+            </div>
+        </div>
+
 
 
 
@@ -652,6 +663,44 @@
      
 
     </script>
+
+    <script>
+    let lastAlarmTime = 0;
+
+    async function checkAlarm() {
+        try {
+            const res = await fetch('/alarm-status');
+            const data = await res.json();
+
+            if (data.alarm && data.time !== lastAlarmTime) {
+                lastAlarmTime = data.time;
+                showAlert();
+            }
+        } catch (err) {
+            console.error("Alarm check failed", err);
+        }
+    }
+
+    function showAlert() {
+        const alertBox = document.getElementById('alert-notification');
+        const bar = alertBox.querySelector('.alert-bar');
+
+        // reset animation
+        bar.style.animation = 'none';       
+        bar.offsetHeight;
+        bar.style.animation = 'alertProgress 5s linear forwards';
+
+        alertBox.classList.add('show');
+
+        setTimeout(() => {
+            alertBox.classList.remove('show');
+        }, 5000);
+    }
+    setInterval(checkAlarm, 500);
+    </script>
+
+
+
 
 
 

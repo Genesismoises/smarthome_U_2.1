@@ -20,6 +20,8 @@ bool buzzerActive = false;
 int buzzerBeepCount = 0;
 unsigned long buzzerLastToggle = 0;
 bool buzzerState = false;
+bool alarmTriggered = false; //flag for alarm notification
+unsigned long alarmTimeStamp;
 
 #define HOLD_TIME 3000
 #define MAX_FAILED_TRIES 3
@@ -28,7 +30,7 @@ bool buzzerState = false;
 #define TOUCH2_PIN 4
 #define DOOR_LED1_PIN   25
 #define DOOR_LED2_PIN   26
-#define BUZZER_PIN 12
+#define BUZZER_PIN 32
 #define SERVO_PIN  18
 
 #define BUZZER_ON  LOW
@@ -58,7 +60,7 @@ const int led1 = 14;
 const int led2 = 27;
 const int led3 = 13;
 
-int threshold = 1500;
+int threshold = 1000;
 unsigned long clapTimeout = 800;
 unsigned long lastClapTime = 0;
 int clapCount = 0;
@@ -147,6 +149,8 @@ void buzzAlert() {
   buzzerBeepCount = 3;
   buzzerActive = true;
   buzzerLastToggle = millis();
+  alarmTriggered = true;
+  alarmTimeStamp = millis();
 }
 
 void openDoor() {
@@ -154,7 +158,7 @@ void openDoor() {
   failedAttempts = 0;
   doorOpenTime = millis();
 
-  doorServo.write(180);
+  doorServo.write(90);
   digitalWrite(DOOR_LED1_PIN, HIGH);
   digitalWrite(DOOR_LED2_PIN, HIGH);
 
@@ -180,27 +184,25 @@ void intruderAlert() {
 
 void showGreetingScreen() {
     lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print(" [GREETINGS]");
     lcd.setCursor(0, 1);
-    lcd.print(" Welcome Kuya!");
+    lcd.print("    Welcome Boii!");
 }
 
 void showDefaultScreen() {
     
-    // Line 1: Room LED status
+    lcd.clear();
+
     lcd.setCursor(0, 0);
-    lcd.print("R1:");
+    lcd.print("R1 ");
     lcd.print(digitalRead(ldrLed1) ? "ON " : "OFF");
-    lcd.print(" R2:");
+    lcd.print(" R2 ");
     lcd.print(digitalRead(led1) ? "ON" : "OFF");
-    
-    // Line 2: Temperature & Humidity
+
     lcd.setCursor(0, 1);
-    lcd.print("T:");
     lcd.print(lastTemp, 1);
-    lcd.print("C H:");
-    lcd.print(lastHum, 1);
+    lcd.print((char)223);
+    lcd.print("C | ");
+    lcd.print(lastHum, 0);
     lcd.print("%");
 }
 
@@ -387,10 +389,14 @@ server.on("/door", HTTP_GET, [](AsyncWebServerRequest *request){
             doorOpen = true;
             doorOpenTime = millis();
             Serial.println("Door opened (180°)");
+            digitalWrite(DOOR_LED1_PIN, HIGH);
+            digitalWrite(DOOR_LED2_PIN, HIGH);
         } else {
             doorServo.write(0);   // Close door
             doorOpen = false;
             Serial.println("Door closed (0°)");
+            digitalWrite(DOOR_LED1_PIN, LOW);
+            digitalWrite(DOOR_LED2_PIN, LOW);
         }
         request->send(200, "text/plain", "Door moved: " + state);
     } else {
@@ -402,6 +408,18 @@ server.on("/door-status", HTTP_GET, [](AsyncWebServerRequest *request){
     String status = doorOpen ? "OPEN" : "CLOSED";
     String json = "{\"door\":\"" + status + "\"}";
     request->send(200, "application/json", json);
+});
+
+server.on("/alarm-status", HTTP_GET, [](AsyncWebServerRequest *request) {
+    StaticJsonDocument<100> doc;
+    doc["alarm"] = alarmTriggered;
+    doc["time"] = alarmTimeStamp;
+
+    String json;
+    serializeJson(doc, json);
+    request->send(200, "application/json", json);
+
+
 });
 
 
@@ -571,7 +589,10 @@ void loop() {
         millis() - touchStartTime >= HOLD_TIME) {
         openDoor();
     }
-    } else {
+    }
+    
+    else {
+
     if (touchStartTime != 0 &&
         !doorOpen &&
         millis() - touchStartTime < HOLD_TIME) {
@@ -594,6 +615,11 @@ void loop() {
 
     // Update buzzer (VERY IMPORTANT)
     updateBuzzer();
+
+    if (alarmTriggered && millis() - alarmTimeStamp > 10000) { //clear flag for alarmTriggered after 10esc
+    alarmTriggered = false;
+    }
+
 
     delay(1);
 }
