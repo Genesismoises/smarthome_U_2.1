@@ -22,6 +22,7 @@ unsigned long buzzerLastToggle = 0;
 bool buzzerState = false;
 bool alarmTriggered = false; //flag for alarm notification
 unsigned long alarmTimeStamp;
+bool continuousAlarm = false; // for trigger alarm
 
 #define HOLD_TIME 3000
 #define MAX_FAILED_TRIES 3
@@ -121,7 +122,7 @@ float getDistanceCM() {
 }
 
 void updateBuzzer() { //BUZZERRRRRRRRRRRRRRRRRRRRRRRRRRRR
-  if (!buzzerActive) return;
+  if (!buzzerActive && !continuousAlarm) return;
 
   unsigned long now = millis();
 
@@ -130,7 +131,7 @@ void updateBuzzer() { //BUZZERRRRRRRRRRRRRRRRRRRRRRRRRRRR
     buzzerState = !buzzerState;
     digitalWrite(BUZZER_PIN, buzzerState ? BUZZER_ON : BUZZER_OFF);
 
-    if (!buzzerState) {
+    if (!buzzerState && !continuousAlarm) {
       buzzerBeepCount--;
       if (buzzerBeepCount <= 0) {
         buzzerActive = false;
@@ -321,7 +322,7 @@ void setup() {
     String json;
     serializeJson(data, json);
     request->send(200, "application/json", json);
-});
+    });
 
   server.on("/sound-data", HTTP_GET, [](AsyncWebServerRequest *request) {
     StaticJsonDocument<100> data;
@@ -330,97 +331,137 @@ void setup() {
     String json;
     serializeJson(data, json);
     request->send(200, "application/json", json);
-});
+    });
 
-// ===== LED status endpoint =====
+    // ===== LED status endpoint =====
 
-server.on("/led-status", HTTP_GET, [](AsyncWebServerRequest *request){
+    server.on("/led-status", HTTP_GET, [](AsyncWebServerRequest *request){
+        StaticJsonDocument<100> data;
+
+        // LDR LEDs: check one of them since they are all synced
+        data["ldr"] = digitalRead(ldrLed1) == HIGH ? "ON" : "OFF";
+
+        // Sound LEDs: check one of them
+        data["sound"] = digitalRead(led1) == HIGH ? "ON" : "OFF";
+
+        String json;
+        serializeJson(data, json);
+        request->send(200, "application/json", json);
+    });
+
+    server.on("/room1", HTTP_GET, [](AsyncWebServerRequest *request){
+        if(request->hasParam("state")){
+            String state = request->getParam("state")->value();
+            if (state == "on") ldrMode = 1;
+            else if (state == "off") ldrMode = 2;
+            else ldrMode = 0;
+            request->send(200, "text/plain", "Room1 updated");
+        } 
+        else {
+            request->send(400, "text/plain", "Missing state parameter");
+        }
+    });
+
+    server.on("/room2", HTTP_GET, [](AsyncWebServerRequest *request){
+        if(request->hasParam("state")){
+            String state = request->getParam("state")->value();
+            if (state == "on") soundMode = 1;
+            else if (state == "off") soundMode = 2;
+            else soundMode = 0;
+
+            request->send(200, "text/plain", "Room2 updated");
+        } else {
+            request->send(400, "text/plain", "Missing state parameter");
+        }
+    });
+
+
+
+
+
+    // ===== Servo control endpoint =====
+
+
+    server.on("/door", HTTP_GET, [](AsyncWebServerRequest *request){
+        if(request->hasParam("state")){
+            String state = request->getParam("state")->value();
+            if(state == "open"){
+                doorServo.write(180); // Open door
+                doorOpen = true;
+                doorOpenTime = millis();
+                Serial.println("Door opened (180°)");
+                digitalWrite(DOOR_LED1_PIN, HIGH);
+                digitalWrite(DOOR_LED2_PIN, HIGH);
+            } else {
+                doorServo.write(0);   // Close door
+                doorOpen = false;
+                Serial.println("Door closed (0°)");
+                digitalWrite(DOOR_LED1_PIN, LOW);
+                digitalWrite(DOOR_LED2_PIN, LOW);
+            }
+            request->send(200, "text/plain", "Door moved: " + state);
+        } else {
+            request->send(400, "text/plain", "Missing state parameter");
+        }
+    });
+
+    server.on("/door-status", HTTP_GET, [](AsyncWebServerRequest *request){
+        String status = doorOpen ? "OPEN" : "CLOSED";
+        String json = "{\"door\":\"" + status + "\"}";
+        request->send(200, "application/json", json);
+    });
+
+    server.on("/alarm-status", HTTP_GET, [](AsyncWebServerRequest *request) { // for notif
+        StaticJsonDocument<100> doc;
+        doc["alarm"] = alarmTriggered;
+        doc["time"] = alarmTimeStamp;
+
+        String json;
+        serializeJson(doc, json);
+        request->send(200, "application/json", json);
+
+
+    });
+
+    server.on("/alarm-toggle", HTTP_GET, [](AsyncWebServerRequest *request){
+        if (request->hasParam("state")) {
+            String state = request->getParam("state")->value();
+            if (state == "on") continuousAlarm = true;
+            else {  continuousAlarm = false;
+                    buzzerActive = false;
+                    buzzerBeepCount = 0;
+                    buzzerState = false;
+                digitalWrite(BUZZER_PIN, BUZZER_OFF);
+            }
+
+            request->send(200, "text/plain", "Alarm toggled: " + state);
+        } else {
+            request->send(400, "text/plain", "Missing state parameter");
+        }
+    });
+
+
+    server.on("/buzzer-status", HTTP_GET, [](AsyncWebServerRequest *request){
+        StaticJsonDocument<100> doc;
+        bool isActive = buzzerActive || continuousAlarm; // active if either normal beep or continuous alarm
+        doc["status"] = isActive ? "Active" : "Inactive";
+        String json;
+        serializeJson(doc, json);
+        request->send(200, "application/json", json);
+    });
+
+    server.on("/ultrasonic-data", HTTP_GET, [](AsyncWebServerRequest *request) {
     StaticJsonDocument<100> data;
 
-    // LDR LEDs: check one of them since they are all synced
-    data["ldr"] = digitalRead(ldrLed1) == HIGH ? "ON" : "OFF";
-
-    // Sound LEDs: check one of them
-    data["sound"] = digitalRead(led1) == HIGH ? "ON" : "OFF";
+    // Reuse your existing variable from loop()
+    data["distance"] = lastDistance;
+    data["status"] = (lastDistance > 0 && lastDistance < 10) ? "Object Detected!" : "Detecting...";
 
     String json;
     serializeJson(data, json);
     request->send(200, "application/json", json);
-});
+    });
 
-server.on("/room1", HTTP_GET, [](AsyncWebServerRequest *request){
-    if(request->hasParam("state")){
-        String state = request->getParam("state")->value();
-        if (state == "on") ldrMode = 1;
-        else if (state == "off") ldrMode = 2;
-        else ldrMode = 0;
-         request->send(200, "text/plain", "Room1 updated");
-    } 
-    else {
-        request->send(400, "text/plain", "Missing state parameter");
-    }
-});
-
-server.on("/room2", HTTP_GET, [](AsyncWebServerRequest *request){
-    if(request->hasParam("state")){
-        String state = request->getParam("state")->value();
-        if (state == "on") soundMode = 1;
-        else if (state == "off") soundMode = 2;
-        else soundMode = 0;
-
-        request->send(200, "text/plain", "Room2 updated");
-    } else {
-        request->send(400, "text/plain", "Missing state parameter");
-    }
-});
-
-
-
-
-
-// ===== Servo control endpoint =====
-
-
-server.on("/door", HTTP_GET, [](AsyncWebServerRequest *request){
-    if(request->hasParam("state")){
-        String state = request->getParam("state")->value();
-        if(state == "open"){
-            doorServo.write(180); // Open door
-            doorOpen = true;
-            doorOpenTime = millis();
-            Serial.println("Door opened (180°)");
-            digitalWrite(DOOR_LED1_PIN, HIGH);
-            digitalWrite(DOOR_LED2_PIN, HIGH);
-        } else {
-            doorServo.write(0);   // Close door
-            doorOpen = false;
-            Serial.println("Door closed (0°)");
-            digitalWrite(DOOR_LED1_PIN, LOW);
-            digitalWrite(DOOR_LED2_PIN, LOW);
-        }
-        request->send(200, "text/plain", "Door moved: " + state);
-    } else {
-        request->send(400, "text/plain", "Missing state parameter");
-    }
-});
-
-server.on("/door-status", HTTP_GET, [](AsyncWebServerRequest *request){
-    String status = doorOpen ? "OPEN" : "CLOSED";
-    String json = "{\"door\":\"" + status + "\"}";
-    request->send(200, "application/json", json);
-});
-
-server.on("/alarm-status", HTTP_GET, [](AsyncWebServerRequest *request) {
-    StaticJsonDocument<100> doc;
-    doc["alarm"] = alarmTriggered;
-    doc["time"] = alarmTimeStamp;
-
-    String json;
-    serializeJson(doc, json);
-    request->send(200, "application/json", json);
-
-
-});
 
 
 
@@ -452,6 +493,8 @@ server.on("/alarm-status", HTTP_GET, [](AsyncWebServerRequest *request) {
 
   
 }
+
+
 
 void loop() {
     unsigned long now = millis();

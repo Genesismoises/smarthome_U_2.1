@@ -92,7 +92,7 @@
                         <div class="toggle-container">
                             <span>OFF</span>
                             <label class="switch">
-                                <input type="checkbox">
+                                <input type="checkbox" id="trigger-alarm">
                                 <span class="slider"></span>
                             </label>
                             <span>ON</span>
@@ -133,11 +133,6 @@
                             <td>Room 2 Lights</td>
                            <td id="room2State"></td>
                         </tr>
-
-                        <tr>
-                            <td>Ultrasonic Sensor</td>
-                            <td>Active</td>
-                        </tr>
                     
                         <tr>
                             <td>Capacitive Sensor</td>
@@ -146,12 +141,17 @@
 
                         <tr>
                             <td>Buzzer</td>
-                            <td>OFF</td>
+                            <td id="buzzer-status"></td>
                         </tr>
                         
                          <tr>
                             <td>Sound Sensor</td>
                             <td id="soundSenStatus"></td>
+                        </tr>
+
+                        <tr>
+                            <td>Ultrasonic Sensor</td>
+                            <td id="ultrasonic-status"></td>
                         </tr>
 
 
@@ -479,6 +479,7 @@
 
         </script>
 
+       
         <script>
             const doorStatus = document.getElementById('door-status');
 
@@ -697,7 +698,67 @@
         }, 5000);
     }
     setInterval(checkAlarm, 500);
+
     </script>
+
+    <script>
+        const alarmCheckbox = document.getElementById('trigger-alarm');
+
+        alarmCheckbox.addEventListener('change', async () => {
+            const state = alarmCheckbox.checked ? 'on' : 'off';
+            try {
+                await fetch(`/alarm-toggle?state=${state}`);
+            } catch (err) {
+                console.error("Failed to toggle alarm:", err);
+            }
+        });
+    </script>
+
+    <script>
+        async function updateBuzzerStatus() {
+            try {
+                const response = await fetch('/buzzer-status');
+                const data = await response.json();
+                document.getElementById('buzzer-status').innerText = data.status;
+                document.getElementById('buzzer-status').style.color = (data.status === "Active") ? "green" : "red";
+            } catch (error) {
+                console.error('Error fetching buzzer status:', error);
+                document.getElementById('buzzer-status').innerText = "--";
+                document.getElementById('buzzer-status').style.color = "black";
+            }
+        }
+
+        // Update every 200ms
+        setInterval(updateBuzzerStatus, 200);
+        updateBuzzerStatus();
+    </script>
+
+    <script>
+        async function updateUltrasonicStatus() {
+            try {
+                const response = await fetch('/ultrasonic-data');
+                const data = await response.json();
+
+                const statusCell = document.getElementById('ultrasonic-status');
+                statusCell.innerText = data.status; // display "Object Detected!" or "No Object"
+                statusCell.style.color = (data.status === "Object Detected!") ? "green" : "red";
+            } catch (error) {
+                console.error('Error fetching ultrasonic status:', error);
+                const statusCell = document.getElementById('ultrasonic-status');
+                statusCell.innerText = "--";
+                statusCell.style.color = "black";
+            }
+        }
+
+        // Update every 200ms
+        setInterval(updateUltrasonicStatus, 200);
+        updateUltrasonicStatus();
+    </script>
+
+
+
+
+
 
 
 
