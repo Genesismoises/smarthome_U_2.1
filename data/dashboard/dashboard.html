@@ -136,7 +136,7 @@
                     
                         <tr>
                             <td>Capacitive Sensor</td>
-                            <td>Active</td>
+                            <td id="capacitive-status"></td>
                         </tr>
 
                         <tr>
@@ -753,6 +753,47 @@
         // Update every 200ms
         setInterval(updateUltrasonicStatus, 200);
         updateUltrasonicStatus();
+    </script>
+
+    <script>
+            async function updateTouchStatus() {
+        try {
+            const res = await fetch('/touch-status');
+            const data = await res.json();
+
+            const cell = document.getElementById('capacitive-status');
+
+            let label = "IDLE";
+            let color = "red";
+
+            if (data.authorized) {
+                label = "AUTHORIZED";
+                color = "green";
+            }
+            else if (data.touch1 && data.touch2) {
+                label = `Initializing...`;
+                color = "orange";
+            }
+
+            else if (data.touch1 || data.touch2) {
+                let activePad = data.touch1 ? "T1" : "T2";
+                label = `Hold Both (${activePad})`;
+                color = "orange";
+            }
+
+            
+
+            cell.innerText = label;
+            cell.style.color = color;
+
+        } catch (err) {
+            console.error("Touch status fetch failed:", err);
+        }
+    }
+
+    setInterval(updateTouchStatus, 200);
+    updateTouchStatus();
+
     </script>
 
 

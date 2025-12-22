@@ -386,10 +386,10 @@ void setup() {
         if(request->hasParam("state")){
             String state = request->getParam("state")->value();
             if(state == "open"){
-                doorServo.write(180); // Open door
+                doorServo.write(90); // Open door
                 doorOpen = true;
                 doorOpenTime = millis();
-                Serial.println("Door opened (180°)");
+                Serial.println("Door opened (90°)");
                 digitalWrite(DOOR_LED1_PIN, HIGH);
                 digitalWrite(DOOR_LED2_PIN, HIGH);
             } else {
@@ -460,6 +460,30 @@ void setup() {
     String json;
     serializeJson(data, json);
     request->send(200, "application/json", json);
+    });
+
+    server.on("/touch-status", HTTP_GET, [](AsyncWebServerRequest *request){
+        bool touch1 = digitalRead(TOUCH1_PIN);
+        bool touch2 = digitalRead(TOUCH2_PIN);
+
+        unsigned long now = millis();
+
+        // Track how long both sensors are touched
+        if (touch1 && touch2) {
+            if (touchStartTime == 0) touchStartTime = now;
+        } else {
+            touchStartTime = 0;
+        }
+
+        bool authorized = (touchStartTime != 0 && (now - touchStartTime >= HOLD_TIME));
+
+        StaticJsonDocument<100> doc;
+        doc["touch1"] = touch1;
+        doc["touch2"] = touch2;
+        doc["authorized"] = authorized;
+        String json;
+        serializeJson(doc, json);
+        request->send(200, "application/json", json);
     });
 
 
