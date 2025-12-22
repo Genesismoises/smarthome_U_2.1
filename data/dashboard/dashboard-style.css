@@ -105,29 +105,31 @@ body{
     box-sizing: border-box;
     padding: 40px;         /* equal spacing on all sides */
     box-sizing: border-box;
-     display: flex;
+    display: flex;
     flex-direction: column;
 }
 .column table {
     
-    height: 85%;
+    flex: 1;
     width: 100%;
 
 }
 
 
 .column-header {
+    flex-shrink: 0;
     margin-bottom: 20px;
     font-size: 2.5em;
     font-family: Arial, Helvetica, sans-serif;
     color: #333333;
 }
 
-/* keep your box layout exactly the same */
+/* keepbox layout exactly the same */
 #sensor-readings-content {
     display: flex;
     flex-direction:  column;
     gap: 0;
+    
 }
 
 
@@ -139,7 +141,8 @@ body{
     border-radius: 50px;
     margin: 20px;
     margin-bottom: 40px;
-    width: 25vw;
+    width: 100%;
+    /*width: 25vw*/
     height: 25vw;
     min-width: 200px;         /* ensures box doesn’t shrink too much */
     min-height: 200px;        /* keeps height reasonable */
@@ -180,13 +183,16 @@ p {
 
 table {
     table-layout: fixed;
-    margin-top: 50px;
-    width: 90%;
-    min-width: 900px;
+    margin-top: 0;
+    /*width: 90%;*/
+    width: 100%;
+    /*min-width: 900px;*/
+    min-width: unset;
+    
     border-collapse: collapse;
     color: #333333;
     border: solid;
-    border-radius: 50px;
+    border-radius: 30px;
     overflow: hidden;
     font-size: 2em;
     background-color: #FAFAFA;
@@ -198,6 +204,7 @@ td {
     background-color: #FAFAFA;
     text-align: center;
     border: 1px solid #C3C3C3;
+
 }
 
 
@@ -479,6 +486,8 @@ footer hr {
     #sensor-readings {
         flex-direction: column;
         align-items: center;
+        padding: 0;           
+        gap: 30px;
     }
 
     .column {
@@ -493,9 +502,8 @@ footer hr {
     table {
         table-layout: fixed;   
         font-size: 1.4em;
-        width: 90%;            
-        min-width: 0; /*600 dati*/ 
-         
+        width: 100%;            
+        min-width: 0;
     }  
 
     td, th {
@@ -661,6 +669,8 @@ body.dark-mode .chartjs-render-monitor,
 body.dark-mode .chartjs-tooltip {
     background-color: transparent !important;
 }
+
+
 
 body.dark-mode .alert {
     background: #282A3A;
