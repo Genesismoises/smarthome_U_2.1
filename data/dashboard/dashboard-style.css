@@ -20,7 +20,7 @@ body{
     display: flex;
     align-items: center;
     width: 100%;
-    justify-content: flex-end;
+    justify-content: space-between;
     position: fixed;
     top: 0;
     left: 0;
@@ -30,6 +30,42 @@ body{
     padding-right: 20px;
     box-shadow: 10px 10px 10px #C3C3C3;
 }
+
+#logo-img {  
+    height: 200px;
+    width: auto;
+    padding-bottom: 20px;
+
+}
+
+#system-title {
+    align-items: center;
+    flex-direction: column;
+
+}
+
+#nav-title {
+    display: flex;
+    align-items: center;
+
+}
+
+#system-name {
+    margin: 0;
+    font-size: 3em;
+    font-weight: bold;
+
+}
+
+#system-label {
+    font-size: 1.5em;
+    margin-top: 4px;
+    margin-bottom: 0px;
+
+}
+
+
+
 
 #control-nav {
     height: 150px;
@@ -48,6 +84,11 @@ body{
     border-radius: 50%;
     transition: transform 0.5s ease;
 }
+
+
+
+
+
 
 #control-menu {
     position: fixed;
@@ -151,7 +192,8 @@ body{
     display: flex;            /* make it a flex container */
     flex-direction: column;   /* stack box-content naturally */
     justify-content: center;  /* center vertically */
-    align-items: center;      /* center horizontally */
+    align-items: center;     /* center horizontally */
+    position: relative; /*fixed position for iconnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn*/
     padding: 20px;  
     
 }
@@ -164,15 +206,17 @@ body{
 }
 
 .box img { 
-    width: 6vw;
+    width: clamp(40px, 5vw, 100px);
     height: auto;
     padding: 10px;
 }
-.box p {
-    font-weight: bold;
-    
+.box > p {
+    position: absolute;
+    bottom: 18px;         /* spacing from bottom */
+    font-size: 1.3em;
+    font-weight: 600;
+    opacity: 0.7;
 }
-
 
 
 
@@ -532,7 +576,33 @@ footer hr {
 
         
     :root {
-        --control-menu-width: 50%; /* mobile width */
+        --control-menu-width: 75%; /* mobile width */
+    }
+
+
+    /*for system title*/
+
+    #nav-title {
+        gap: 12px;
+    }
+
+    #logo-img {
+        height: 150px;
+        padding-bottom: 0;
+    }
+
+    #system-title {
+        align-items: flex-start;
+    }
+
+    #system-name {
+        font-size: 1.8em;
+    }
+
+    #system-label {
+        font-size: 0.85em;
+        margin-top: 2px;
+        letter-spacing: 0.6px;
     }
 
     
@@ -577,11 +647,14 @@ body.dark-mode #main-nav {
     background-color: #282A3A;
     color: #F4F4F4;
     box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
+    
 }
 
-body.dark-mode #main-nav img, body.dark-mode #control-nav img {
-    content: url('./images/control-white.png');
-}      
+body.dark-mode #main-nav .control-button1, body.dark-mode #control-nav img, body.dark-mode #logo-img, body.dark-mode #footer-logo {
+    filter: invert(1);
+    transition: filter 0.2s ease;
+}  
+
 
 
 
@@ -635,10 +708,7 @@ body.dark-mode footer {
     color: white;
 }
 
-body.dark-mode #footer-logo {
-    content: url('./images/logo-white.png');
 
-}
 
 /* Modal dark mode */
 body.dark-mode #sensor-modal {

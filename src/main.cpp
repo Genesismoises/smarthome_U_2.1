@@ -8,6 +8,7 @@
 #include <ArduinoJson.h>
 #include <Wire.h>
 #include <LiquidCrystal_PCF8574.h>
+#include <ESPmDNS.h> //for custom domain
 
 // ===== Door + Touch System =====
 bool doorOpen = false;
@@ -94,8 +95,8 @@ float lastDistance = -1;
 
 
 // --- WiFi credentials ---
-const char* ssid = "Baldonasa Fam 2.4G";
-const char* password = "Borgoydabest_7";
+const char* ssid = "ZTE_2.4G_ZnWXMy";
+const char* password = "09369270764";
 
 // Create server on port 80
 AsyncWebServer server(80);
@@ -297,6 +298,13 @@ void setup() {
         Serial.println(WiFi.localIP());
     } else {
         Serial.println("No WiFi — server will still run (AP fallback could be added).");
+    }
+
+    if (!MDNS.begin("bahaynikuya")) {
+        Serial.println("❌ mDNS failed to start");
+    } else {
+        Serial.println("✅ mDNS started");
+        Serial.println("Access via: http://bahaynikuya.local");
     }
 
     // ===== Sensor endpoint =====
