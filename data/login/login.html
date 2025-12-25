@@ -1,48 +1,56 @@
-<html>
-    <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.5">
-    <title>Smart Home UI</title>
-    <link rel="stylesheet" href="/login/login-style.css">
-    </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Home UI</title>
+  <link rel="stylesheet" href="/login/login-style.css">
+</head>
 
-    <body>
-        <img src="/login/images/user-icon-black.png" alt="user-icon">
-        <h1></h1>
+<body>
 
-        <form onsubmit="checkPassword(event)">
-            <input type="password" id="password" placeholder="Enter password" >
-            <div id="error-message"></div>
-            <input type="submit" onclick="checkPassword()" value="LOGIN">
-            
-        </form>
+  <div class="logo">
+    <img src="./images/logo-black.png" alt="Logo">
+    <span>Bahay ni Kuya</span>
+  </div>
 
+  <!-- Login Card -->
+  <div class="login-card">
+    <div class="icon-circle">
+      <span><img src="./images/user-icon-black.png" alt="Logo" ></span>
+    </div>
 
-        <script>
+    <h2>Log in</h2>
+    <p class="subtitle">To access your smart home dashboard.</p>
 
-            const adminPassword = "password"
+    <form onsubmit="checkLogin(event)">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
 
-            function checkPassword(event) {
+      <div id="error-message"></div>
 
-                event.preventDefault();
-                const input = document.getElementById('password').value;
-                const errorDiv = document.getElementById('error-message');
+      <button type="submit">LOG IN</button>
+    </form>
+  </div>
 
-                if(input === adminPassword) {
-                    window.location.href = "../dashboard/dashboard.html";
-                }
+  <script>
+    const adminUser = "admin";
+    const adminPassword = "password";
 
-                else {
-                    errorDiv.textContent = "Incorrect password. Try again.";
-                }
-            }
+    function checkLogin(event) {
+      event.preventDefault();
 
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      const errorDiv = document.getElementById("error-message");
 
+      if (user === adminUser && pass === adminPassword) {
+        window.location.href = "../dashboard/dashboard.html";
+      } else {
+        errorDiv.textContent = "Invalid credentials. Try again.";
+      }
+    }
+  </script>
 
-        </script>
-
-
-
-
-    </body>
+</body>
 </html>

@@ -74,7 +74,6 @@ body{
     padding-left: 20px;
 
 
-
 }
 
 .control-button1, .control-button2 {
@@ -108,7 +107,7 @@ body{
     z-index: 2;
     box-sizing: border-box;
     height: 100vh;
-    border-radius: 10px 0 10px 0;
+    border-radius: 70px 0px 0px 70px;
     border: solid 1px #C3C3C3;
  
 
@@ -627,7 +626,7 @@ body.dark-mode .box {
 }
 
 body.dark-mode #control-menu {
-    border: 1px solid #34364B;
+    border: 1px solid #444;
     background-color: #23282e;
     background-image:
     radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
@@ -652,7 +651,7 @@ body.dark-mode #main-nav {
 
 body.dark-mode #main-nav .control-button1, body.dark-mode #control-nav img, body.dark-mode #logo-img, body.dark-mode #footer-logo {
     filter: invert(1);
-    transition: filter 0.2s ease;
+    transition: transform 0.5s ease, filter 0.2s ease;
 }  
 
 

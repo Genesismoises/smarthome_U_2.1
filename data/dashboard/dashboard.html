@@ -123,7 +123,7 @@
                 
                 <div class="column">
                     <div class="column-header">
-                        <h2>Sensor Status</h2>
+                        <h2>Home Status</h2>
                     </div>
 
                     <table>
@@ -764,43 +764,50 @@
     </script>
 
     <script>
-            async function updateTouchStatus() {
-        try {
-            const res = await fetch('/touch-status');
-            const data = await res.json();
+        let authorizedUntil = 0;
 
-            const cell = document.getElementById('capacitive-status');
+async function updateTouchStatus() {
+    try {
+        const res = await fetch('/touch-status');
+        const data = await res.json();
 
-            let label = "IDLE";
-            let color = "red";
+        const cell = document.getElementById('capacitive-status');
+        const now = Date.now();
 
-            if (data.authorized) {
-                label = "AUTHORIZED";
-                color = "green";
-            }
-            else if (data.touch1 && data.touch2) {
-                label = `Initializing...`;
-                color = "orange";
-            }
-
-            else if (data.touch1 || data.touch2) {
-                let activePad = data.touch1 ? "T1" : "T2";
-                label = `Hold Both (${activePad})`;
-                color = "orange";
-            }
-
-            
-
-            cell.innerText = label;
-            cell.style.color = color;
-
-        } catch (err) {
-            console.error("Touch status fetch failed:", err);
+        // If authorized event just happened → start 10s window
+        if (data.authorized) {
+            authorizedUntil = now + 9500; //timer 
         }
-    }
 
-    setInterval(updateTouchStatus, 200);
-    updateTouchStatus();
+        // Show AUTHORIZED while timer is active
+        if (now < authorizedUntil) {
+            cell.innerText = "Access Granted!";
+            cell.style.color = "green";
+            return;
+        }
+
+        // After timeout, reset display
+        if (data.touch1 && data.touch2) {
+            cell.innerText = "Authenticating...";
+            cell.style.color = "orange";
+        } 
+        else if (data.touch1 || data.touch2) {
+            cell.innerText = "Awaiting Dual Touch...";
+            cell.style.color = "orange";
+        } 
+        else {
+            cell.innerText = "Idle";
+            cell.style.color = "red";
+        }
+
+    } catch (err) {
+        console.error("Touch status fetch failed:", err);
+    }
+}
+
+setInterval(updateTouchStatus, 200);
+updateTouchStatus();
+
 
     </script>
 

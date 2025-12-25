@@ -1,108 +1,155 @@
+/* ===== BASE ===== */
 body {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: impact;
-    height: 100vh;
-    margin: 0;
-    background-color: #f7f7f7;
-    background-image:
-        radial-gradient(circle at 90% 10%, #d8c3e0cc, transparent 60%),
-        radial-gradient(circle at 40% 70%, #b8d0f1cc, transparent 50%),
-        radial-gradient(circle at 10% 90%, #c4e3e6cc, transparent 75%),
-        radial-gradient(circle at 75% 50%, #e8e3f0cc, transparent 80%);
-    color: black;
+  min-height: 100vh;
+  margin: 0;
+  font-family: Impact, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f7f7f7;
+  background-image:
+    radial-gradient(circle at 90% 10%, #d8c3e0cc, transparent 60%),
+    radial-gradient(circle at 40% 70%, #b8d0f1cc, transparent 50%),
+    radial-gradient(circle at 10% 90%, #c4e3e6cc, transparent 75%),
+    radial-gradient(circle at 75% 50%, #e8e3f0cc, transparent 80%);
 }
 
-
-
-img {
-    width: 350px;
-    height: auto;
-    
+/* ===== BRAND (top-left like reference) ===== */
+.logo {
+  position: absolute;
+  top: 24px;
+  left: 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.4em;
 }
 
-h1 {
-    font-size: 3em;
-    margin-bottom: 20px;
+.logo img {
+  width: 100px;
 }
 
+/* ===== LOGIN CARD ===== */
+.login-card {
+  width: 420px;
+  padding: 40px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+  text-align: center;
+}
+
+/* Icon circle */
+.icon-circle img {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  border-radius: 18px;
+  display: flex;
+  font-size: 1.8em;
+}
+
+h2 {
+  margin: 10px 0 5px;
+  font-size: 1.8em;
+}
+
+.subtitle {
+  font-size: 0.95em;
+  opacity: 0.7;
+  margin-bottom: 30px;
+}
+
+/* ===== FORM ===== */
 form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-input[type="password"] {
-    width: 1000px;
-    padding: 25px;
-    border-radius: 20px;
-    border: 1px solid;
-  }
+input {
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
 
-input[type="submit"]{
-    width: 300px;
-    height: 80;
-    margin: 20px;
-    border-radius: 100px;
-    background-color: 23282e;
-    color: white;
-    font-size: 1.5em;
-    
-   
+input::placeholder {
+  font-size: 1em;
+}
+
+button {
+  margin-top: 10px;
+  padding: 16px;
+  border-radius: 999px;
+  border: none;
+  background: #23282e;
+  color: white;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
 }
 
 #error-message {
-    color: red;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 2em;
+  color: red;
+  font-family: "Courier New", monospace;
+  font-size: 0.95em;
 }
 
-#password::placeholder {
-    font-size: 30px;
-}
-
+/* ===== DARK MODE ===== */
 @media (prefers-color-scheme: dark) {
-    body {
-        background-color: 23282e;
-        background-image:
-        radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
-        radial-gradient(circle at 40% 70%, #9b3d7d77, transparent 50%),
-        radial-gradient(circle at 10% 90%, #1d2b4f77, transparent 75%),
-        radial-gradient(circle at 75% 50%, #3e336b77, transparent 80%);
-        color: white;
-    }
-    
-    img {
-        content: url('./images/user-icon-white.png');
-    }
+  body {
+    background-color: #23282e;
+    background-image:
+      radial-gradient(circle at 90% 10%, #6e267177, transparent 60%),
+      radial-gradient(circle at 40% 70%, #9b3d7d77, transparent 50%),
+      radial-gradient(circle at 10% 90%, #1d2b4f77, transparent 75%),
+      radial-gradient(circle at 75% 50%, #3e336b77, transparent 80%);
+    color: white;
+  }
+
+  .login-card {
+    background-color: #282A3A;
+    box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B
+  }
+
+  input {
+    background: #1e1e1e;
+    color: white;
+    border: 1px solid #444;
+  }
+
+  .logo img, .login-card img {
+    filter: invert(1) brightness(1.2);
+  }
+  
+  button {
+    background-color: #322e40;
+    box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
+  }
 }
 
 @media (max-width: 800px) {
-     input[type="password"] {
-      width: 500px;
-      padding: 18px;
-      border-radius: 16px;
-      font-size: 1.1em;
+  .login-card {
+    width: 90%;
+    padding: 30px 24px;
   }
 
-  input[type="submit"] {
-      max-width: 200px;
-      height: 60px;
-      margin: 15px;
-      font-size: 1.2em;
-      border-radius: 60px;
-  }
-  
-  img {
-    width: 200px;
-    height: auto;
+  .logo {
+    font-size: 1.1em;
+    left: 20px;
+    top: 20px;
   }
 
-  #error-message {
-    font-size: 1.3em;
-}
+  .logo img {
+    width: 32px;
+  }
+
+  button {
+    font-size: 1.05em;
+  }
 }

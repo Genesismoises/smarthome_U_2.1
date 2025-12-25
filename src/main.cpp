@@ -95,8 +95,8 @@ float lastDistance = -1;
 
 
 // --- WiFi credentials ---
-const char* ssid = "ZTE_2.4G_ZnWXMy";
-const char* password = "09369270764";
+const char* ssid = "Baldonasa Fam 2.4G";
+const char* password = "Borgoydabest_7";
 
 // Create server on port 80
 AsyncWebServer server(80);
