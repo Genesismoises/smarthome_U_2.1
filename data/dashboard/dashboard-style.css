@@ -343,7 +343,7 @@ td {
     justify-content: center;
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.5em;
+    font-size: 1.2em;
    
 }
 
@@ -559,6 +559,21 @@ footer hr {
     .box {
         width: 90vw;   /* make box wider on mobile relative to viewport */
         height: auto;  /* keep aspect ratio */
+
+         background-color: #FAFAFA;
+    box-shadow: 8px 8px 16px #C3C3C3, -8px -8px 16px #C3C3C3 ;
+    color: #333333;
+    border-radius: 50px;
+    margin: 20px;
+    margin-bottom: 40px;
+    width: 90vw;
+  
+    display: flex;            /* make it a flex container */
+    flex-direction: column;   /* stack box-content naturally */
+    justify-content: center;  /* center vertically */
+    align-items: center;     /* center horizontally */
+    position: relative; /*fixed position for iconnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn*/
+    padding: 20px;  
     }
 
     .box p {
@@ -828,5 +843,97 @@ body.dark-mode .alert-bar  {
     from { width: 100%; }
     to { width: 0%; }
 }
+/* inside control-content */
+#event-sensors {
+    display: flex;
+    flex-direction: column; /* stack vertically */
+    gap: 50px; /* same as .control-row spacing */
+    margin-top: 30px;
+    width: 100%; /* take full width of control-content */
 
 
+}
+
+body.dark-mode .event-card {
+    background-color: #282a3a;
+    color: white;
+    box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
+    
+}
+
+.event-card {
+    background-color: #FAFAFA;
+    border-radius: 30px;
+    padding: 20px;
+    width: 95%; /* full width */
+    min-height: 120px; /* enough for content */
+    display: flex;
+    flex-direction: row; /* icon + texts side by side */
+    align-items: center;
+   
+    box-shadow: 6px 6px 12px #C3C3C3, -6px -6px 12px #C3C3C3;
+    transition: transform 0.3s;
+    text-align: left;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+}
+
+#capacitive-status, #ultrasonic-status, #soundSenStatus{
+    margin-left: 8vh;
+}
+.event-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.event-card img {
+    width: 50px;
+    height: auto;
+    margin-right: 20px; /* gap between icon and text */
+}
+
+.event-card p:first-of-type {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0;
+}
+
+.event-card p:last-of-type {
+    font-size: 1em;
+    margin: 0;
+    opacity: 0.7;
+}
+
+/* Mobile */
+@media (max-width: 800px) {
+    #event-sensors {
+        gap: 50px; /* same spacing as desktop */
+    }
+
+    .event-card {
+        flex-direction: row; /* keep row layout */
+        align-items: center;
+        justify-content: flex-start;
+        text-align: left;
+        min-height: 100px;
+    }
+
+    .event-header {
+        margin-right: 20px;
+    }
+
+    .event-card img {
+        margin: 0 0 5px 0;
+    }
+
+    #capacitive-status,
+    #ultrasonic-status,
+    #soundSenStatus {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

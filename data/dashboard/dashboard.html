@@ -91,6 +91,7 @@
                             <span>ON</span>
                         </div>
                     </div>
+
                 </div>
 
         
@@ -109,6 +110,41 @@
                         </div>
                     </div>
                 </div>
+
+               
+                 <!-- EVENT SENSORS -->
+
+                <div class="control-header">
+                    <h1>Events</h1>
+                </div>
+
+                <div id="event-sensors">
+                    <div class="event-card" id="capacitive-card">
+                        <div class="event-header">
+                            <img src="./images/capacitive-icon.png" alt="capacitive">
+                            <p>Authentication</p>
+                        </div>
+                        <p id="capacitive-status">Idle</p>
+                    </div>
+
+                    <div class="event-card" id="sound-card">
+                        <div class="event-header">
+                            <img src="./images/sound-dark.png" alt="sound">
+                            <p>Clap Detection</p>
+                        </div>
+                        <p id="soundSenStatus">--</p>
+                    </div>
+
+                    <div class="event-card" id="ultrasonic-card">
+                        <div class="event-header">
+                            <img src="./images/ultrasonic-icon.png" alt="ultrasonic">
+                            <p>Object Detection</p>
+                        </div>
+                        <p id="ultrasonic-status">--</p>
+                    </div>
+                </div>
+
+
 
             </div> 
         </div> 
@@ -141,17 +177,17 @@
                             <td>Room 2 Lights</td>
                            <td id="room2State"></td>
                         </tr>
-                    
+                        <!--
                         <tr>
                             <td>Capacitive Sensor</td>
                             <td id="capacitive-status"></td>
-                        </tr>
+                        </tr>-->
 
                         <tr>
                             <td>Buzzer</td>
                             <td id="buzzer-status"></td>
                         </tr>
-                        
+                        <!--
                          <tr>
                             <td>Sound Sensor</td>
                             <td id="soundSenStatus"></td>
@@ -160,7 +196,7 @@
                         <tr>
                             <td>Ultrasonic Sensor</td>
                             <td id="ultrasonic-status"></td>
-                        </tr>
+                        </tr>-->
 
 
 
@@ -215,6 +251,9 @@
                 </div>
 
             </div>
+
+  
+
 
 
 
