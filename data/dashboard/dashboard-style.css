@@ -1073,7 +1073,8 @@ footer {
     width: 100%;
     margin-top: 100px;
     width: 100%;
-    background: #282A3A;
+    /*background: #282A3A;*/
+    background: inherit;
     color: inherit;
     padding: 50px 20px;
     border-top-left-radius: 60px;
@@ -1088,12 +1089,17 @@ footer {
     align-items: flex-start;
     flex-wrap: wrap;
 }
-.container h3::after {
+body.dark-mode .container h3::after {
+    background: white;
+}
+
+
+.container h3::after { /*horizontal line*/
     content: "";
     display: block;
     height: 2px;
     width: 50px;
-    background: #fff;
+    background: black;
     margin-top: 20px;
 }
 .container li a:hover {
@@ -1110,7 +1116,7 @@ footer {
     margin-bottom: 15px;
 }
 .footer-col-1 p {
-    color: #fff;
+    color: inherit;
     font-size: 15px;
     line-height: 20px;
 }
@@ -1121,7 +1127,7 @@ footer {
 
 }
 .footer-col-2 h3 {
-    color: #fff;
+    color: inherit;
     font-size: 20px;
     margin-bottom: 15px;
 }
@@ -1132,7 +1138,7 @@ footer {
     margin-bottom: 10px;
 }
 .footer-col-2 ul li  {
-    color: #fff;
+    color: inherit;
     text-decoration: none;
 }
 .footer-col-3 {
@@ -1141,7 +1147,7 @@ footer {
     margin-bottom: 20px;
 }
 .footer-col-3 h3 {
-    color: #fff;
+    color: inherit;
     font-size: 20px;
     margin-bottom: 15px;
 }
@@ -1152,7 +1158,7 @@ footer {
     margin-bottom: 10px;
 }
 .footer-col-3 ul li a {
-    color: #fff;
+    color: inherit;
     text-decoration: none;
 }
 .footer-col-4 {
@@ -1161,7 +1167,7 @@ footer {
     margin-bottom: 20px;
 }
 .footer-col-4 h3 {
-    color: #fff;
+    color: inherit;
     font-size: 20px;
     margin-bottom: 15px;
 }
@@ -1180,20 +1186,20 @@ form input{
     background: transparent;
     width: 100%;
     border: none;
-    color: #fff;
+    color: inherit;
     outline: none;
 }
 form button{
     background: transparent;
     border: none;
-    color: #fff;
+    color: inherit;
     cursor: pointer;
     outline: none;
 }
 .social-icons{
     margin-top: 50px;
 }
-.social-icons a{
+.social-icons a, .social-icons img{
     display: inline-block;
     width: 40px;
     height: 40px;
@@ -1206,10 +1212,9 @@ form button{
     margin-bottom: 10px;
     transition: all 0.5s ease;
 }
-.social-icons a:hover{
-    background: #e701e7;
+ .social-icons img:hover {
     color: #fff;
-    transform: scale(2);
+    transform: scale(1.7);
     transition: all 0.5s ease;
 }
 
