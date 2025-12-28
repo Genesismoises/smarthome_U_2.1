@@ -9,6 +9,7 @@
 #include <Wire.h>
 #include <LiquidCrystal_PCF8574.h>
 #include <ESPmDNS.h> //for custom domain
+#include <deque> //for logs
 
 // ===== Door + Touch System =====
 bool doorOpen = false;
@@ -25,6 +26,10 @@ bool alarmTriggered = false; //flag for alarm notification
 unsigned long alarmTimeStamp;
 bool continuousAlarm = false; // for trigger alarm
 
+unsigned long lastMotionLog = 0;  //cool down for ultrasonic log
+const unsigned long motionCooldown = 5000; 
+bool motionActive = false;
+
 #define HOLD_TIME 3000
 #define MAX_FAILED_TRIES 3
 #define MAX_DOOR_OPEN_TIME 10000
@@ -32,7 +37,7 @@ bool continuousAlarm = false; // for trigger alarm
 #define TOUCH2_PIN 4
 #define DOOR_LED1_PIN   25
 #define DOOR_LED2_PIN   26
-#define BUZZER_PIN 32
+#define BUZZER_PIN 32   
 #define SERVO_PIN  18
 
 #define BUZZER_ON  LOW
@@ -122,6 +127,22 @@ float getDistanceCM() {
     return distance;
 }
 
+struct Activity { //for logs
+    String message;
+    unsigned long timestamp;
+};
+
+std::deque<Activity> recentActivities; // will store last 10 events
+
+void addActivity(String message) {
+    Activity act;
+    act.message = message;
+    act.timestamp = millis(); // store the event timestamp
+    recentActivities.push_front(act); // newest first
+    if (recentActivities.size() > 10) recentActivities.pop_back(); // keep last 10
+}
+
+
 void updateBuzzer() { //BUZZERRRRRRRRRRRRRRRRRRRRRRRRRRRR
   if (!buzzerActive && !continuousAlarm) return;
 
@@ -147,6 +168,7 @@ void buzzOpen() {
   buzzerActive = true;
   buzzerLastToggle = millis();
 }
+
 void buzzAlert() {
   buzzerBeepCount = 3;
   buzzerActive = true;
@@ -165,6 +187,7 @@ void openDoor() {
   digitalWrite(DOOR_LED2_PIN, HIGH);
 
   buzzOpen();
+  addActivity("🔓 Door unlocked");  
 }
 
 void closeDoor() {
@@ -175,10 +198,12 @@ void closeDoor() {
   digitalWrite(DOOR_LED2_PIN, LOW);
 }
 
+//not used
 void intruderAlert() {
   digitalWrite(DOOR_LED1_PIN, LOW);
   digitalWrite(DOOR_LED2_PIN, LOW);
   buzzAlert();
+
 }
 
 
@@ -310,7 +335,6 @@ void setup() {
     // ===== Sensor endpoint =====
   server.on("/sensor-data", HTTP_GET, [](AsyncWebServerRequest *request){
     
-   
 
     // Handle sensor read errors
     if (isnan(lastTemp)) lastTemp = 0.00;
@@ -458,16 +482,32 @@ void setup() {
         request->send(200, "application/json", json);
     });
 
+    
+
     server.on("/ultrasonic-data", HTTP_GET, [](AsyncWebServerRequest *request) {
     StaticJsonDocument<100> data;
 
-    // Reuse your existing variable from loop()
     data["distance"] = lastDistance;
-    data["status"] = (lastDistance > 0 && lastDistance < 10) ? "Object Detected!" : "Detecting...";
+
+    bool motionDetected = (lastDistance > 0 && lastDistance < 10);
+    data["status"] = motionDetected ? "Motion Detected!" : "Detecting...";
+
+    unsigned long now = millis();
+    if (motionDetected && millis() - lastMotionLog > motionCooldown){
+    addActivity("🚨 Motion Detected! (Room 3)");
+    motionActive = true;          // motion is ongoing
+    lastMotionLog = now; 
+    }
+
+     // Reset state when motion stops
+    if (!motionDetected && motionActive) {
+        motionActive = false;
+    }
 
     String json;
     serializeJson(data, json);
     request->send(200, "application/json", json);
+  
     });
 
     server.on("/touch-status", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -493,6 +533,25 @@ void setup() {
         serializeJson(doc, json);
         request->send(200, "application/json", json);
     });
+
+    // ===== Activity Log Endpoint =====
+    server.on("/activity-log", HTTP_GET, [](AsyncWebServerRequest *request){
+        StaticJsonDocument<1024> doc;
+        int i = 0;
+        for (auto &act : recentActivities) {
+            doc[i]["message"] = act.message;
+
+            // Convert millis timestamp to elapsed time in seconds
+            unsigned long elapsed = (millis() - act.timestamp) / 1000;
+            doc[i]["elapsed"] = elapsed;
+
+            i++;
+        }
+        String json;
+        serializeJson(doc, json);
+        request->send(200, "application/json", json);
+    });
+
 
 
 
@@ -683,6 +742,7 @@ void loop() {
 
     if (failedAttempts >= MAX_FAILED_TRIES) {
         buzzAlert();
+        addActivity("🚨 Intruder Alert!");
         failedAttempts = 0;
     }
     }

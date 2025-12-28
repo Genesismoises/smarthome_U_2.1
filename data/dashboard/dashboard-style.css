@@ -1326,6 +1326,12 @@ body.dark-mode .system-status {
     border-radius: 50%;
     background: red; /*#2ecc71*/
     margin-right: 8px;
+
+    display: inline-block;
+    border-radius: 50%;
+    margin-left: 5px;
+    margin-right: 5px;
+    vertical-align: middle;
 }
 
 /*recent activity*/
