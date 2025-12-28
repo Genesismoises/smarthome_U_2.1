@@ -62,7 +62,7 @@ const int led1 = 14;
 const int led2 = 27;
 const int led3 = 13;
 
-int threshold = 1000;
+int threshold = 800;
 unsigned long clapTimeout = 800;
 unsigned long lastClapTime = 0;
 int clapCount = 0;
@@ -508,6 +508,10 @@ void setup() {
     server.serveStatic("/login/", LittleFS, "/login/");
     server.serveStatic("/login/images/", LittleFS, "/login/images/");
 
+    //serve js
+    server.serveStatic("/js", LittleFS, "/js");
+    server.serveStatic("/dashboard/fonts", LittleFS, "/dashboard/fonts");
+
     // Route for dashboard
     server.on("/dashboard/dashboard.html", HTTP_GET, [](AsyncWebServerRequest *request){
         if (LittleFS.exists("/dashboard/dashboard.html")) {
@@ -688,7 +692,7 @@ void loop() {
     closeDoor();
     }
 
-    // Update buzzer (VERY IMPORTANT)
+    // Update buzzer 
     updateBuzzer();
 
     if (alarmTriggered && millis() - alarmTimeStamp > 10000) { //clear flag for alarmTriggered after 10esc

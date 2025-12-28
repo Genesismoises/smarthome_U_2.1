@@ -1,5 +1,76 @@
+@font-face { /*Fonts*/
+    font-family: 'Inter';
+    src: url('./fonts/Inter-Regular.woff2') format('woff2'),
+        url('./fonts/Inter-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('./fonts/Inter-Regular.woff2') format('woff2'),
+        url('./fonts/Inter-Regular.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('./fonts/Inter-Regular.woff2') format('woff2'),
+        url('./fonts/Inter-Regular.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('./fonts/SpaceGrotesk-Light.woff2') format('woff2'),
+        url('./fonts/SpaceGrotesk-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('./fonts/SpaceGrotesk-Regular.woff2') format('woff2');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('./fonts/SpaceGrotesk-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('./fonts/SpaceGrotesk-Bold.woff2') format('woff2');
+    font-weight: 700;
+}
+
+* {margin: 0; padding: 0; box-sizing: border-box;}
+
+main {
+    flex: 1;
+}
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+footer {
+  margin-top: auto;
+}
+html{
+    margin: 0;
+}
 body{
     min-height: 100vh;
+    margin: 0;
     height: auto;
     width: auto;
     background-color: #f7f7f7;
@@ -9,10 +80,12 @@ body{
         radial-gradient(circle at 10% 90%, #c4e3e6cc, transparent 75%),
         radial-gradient(circle at 75% 50%, #e8e3f0cc, transparent 80%);
     color: #333333;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+
     
 }
-
-
 
 #main-nav {
     background-color: #FAFAFA;
@@ -68,10 +141,12 @@ body{
 
 
 #control-nav {
+    
     height: 150px;
     display: flex;
     align-items: center;
     padding-left: 20px;
+    
 
 
 }
@@ -83,8 +158,6 @@ body{
     border-radius: 50%;
     transition: transform 0.5s ease;
 }
-
-
 
 
 
@@ -114,6 +187,7 @@ body{
     
 
 }
+
 .parent-box {
     display: flex;
 
@@ -194,6 +268,7 @@ body{
     align-items: center;     /* center horizontally */
     position: relative; /*fixed position for iconnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn*/
     padding: 20px;  
+    transition: transform 0.3s;
     
 }
 
@@ -683,6 +758,10 @@ body.dark-mode table, body.dark-mode td {
 body.dark-mode #heading {
     color: #F4F4F4;
 }
+body.dark-mode .dashboard-footer {
+    box-shadow: 8px 8px 16px #1D1E2C, -8px -8px 16px #34364B;
+}
+
 
 body.dark-mode #temperature {
     content: url('./images/temperature-blue.png');
@@ -936,4 +1015,278 @@ body.dark-mode .event-card {
         margin-left: auto;
         margin-right: auto;
     }
+}
+
+/*Google fonts*/
+
+h1, h2, h3, h4, .column-header {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+}
+
+#system-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+#system-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    opacity: 0.85;
+}
+
+table, td, th {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+
+
+.box p,
+.event-card p,
+.control-row span {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+.switch,
+button {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+
+
+
+@media (max-width: 600px) {
+
+    #logout-button {
+        margin: 10px auto 0;
+    }
+
+
+}
+
+/*new footer*/
+
+footer {
+    width: 100%;
+    margin-top: 100px;
+    width: 100%;
+    background: #282A3A;
+    color: inherit;
+    padding: 50px 20px;
+    border-top-left-radius: 60px;
+    
+
+}
+.container {
+    width: 90%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+.container h3::after {
+    content: "";
+    display: block;
+    height: 2px;
+    width: 50px;
+    background: #fff;
+    margin-top: 20px;
+}
+.container li a:hover {
+    color: #e701e7;
+    transition: all 0.5s ease;
+}
+.footer-col-1 {
+    flex-basis: 30%;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.footer-col-1 img {
+    width: 55px;
+    margin-bottom: 15px;
+}
+.footer-col-1 p {
+    color: #fff;
+    font-size: 15px;
+    line-height: 20px;
+}
+.footer-col-2 {
+    flex-basis: 15%;
+    padding: 10px;
+    margin-bottom: 20px;
+
+}
+.footer-col-2 h3 {
+    color: #fff;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+.footer-col-2 ul {
+    list-style: none;
+}
+.footer-col-2 ul li {
+    margin-bottom: 10px;
+}
+.footer-col-2 ul li  {
+    color: #fff;
+    text-decoration: none;
+}
+.footer-col-3 {
+    flex-basis: 15%;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.footer-col-3 h3 {
+    color: #fff;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+.footer-col-3 ul {
+    list-style: none;
+}
+.footer-col-3 ul li {
+    margin-bottom: 10px;
+}
+.footer-col-3 ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+.footer-col-4 {
+    flex-basis: 20%;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.footer-col-4 h3 {
+    color: #fff;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+form{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+}
+form .far{
+    color: #ccc;
+    margin-right: 10px;
+}
+form input{
+    background: transparent;
+    width: 100%;
+    border: none;
+    color: #fff;
+    outline: none;
+}
+form button{
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    outline: none;
+}
+.social-icons{
+    margin-top: 50px;
+}
+.social-icons a{
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    color: #25262A;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    transition: all 0.5s ease;
+}
+.social-icons a:hover{
+    background: #e701e7;
+    color: #fff;
+    transform: scale(2);
+    transition: all 0.5s ease;
+}
+
+.footer-bottom, .footer-bottom p {
+    text-align: center;
+    font-family: 'Space Grotesk', sans-serif !important;
+    font-size: 0.75rem;
+    opacity: 0.8;
+    margin-top: 0px;
+}
+
+.social-icons .icon {
+    position: relative;
+    display: inline-block;
+}
+
+
+.social-icons .icon::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.2s ease;
+}
+.social-icons .icon::before {
+    content: "";
+    position: absolute;
+    bottom: 115%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #222;
+    opacity: 0;
+    transition: 0.2s ease;
+}
+
+.social-icons .icon:hover::after,
+.social-icons .icon:hover::before {
+    opacity: 1;
+}
+
+#logout-button:hover {
+    background: linear-gradient(135deg, #f04e4e, #ff7676);
+    box-shadow: 0 8px 20px rgba(240, 78, 78, 0.6);
+    transform: translateY(-2px);
+}
+
+#logout-button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(240, 78, 78, 0.4);
+}
+.logout-button:hover {
+    background: #f0f0f0;
+}
+
+#logout-button {
+    margin-top: 30px;
+    padding: 10px 25px;
+    border-radius: 30px;
+    border: 2px solid #f04e4e;
+    background: linear-gradient(135deg, #ff7676, #f04e4e);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1em;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 5px 15px rgba(240, 78, 78, 0.4);
 }

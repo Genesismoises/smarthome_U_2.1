@@ -4,851 +4,973 @@
         <meta name="viewport" content="width=device-width, initial-scale=0.5">
         <title>Dashboard</title>
         <link rel="stylesheet" href="dashboard-style.css">
-        <!-- Chart.js (online) -->
+        <!-- Chart.js (online) --> 
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    
+        <script src="/js/chart.umd.min.js"></script>
+        <script src="/js/chartjs-adapter-date-fns.bundle.min.js"></script>
+        <!--<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">-->
+
+
 
     </head>
 
     
     <body>
-        <nav id="main-nav">
+        <div class="wrapper">
+            <main>
+        
+            <nav id="main-nav">
 
-                <div id="nav-title">
-                    <img src="./images/logo-black.png" alt="logo" id="logo-img">
-                    <div id="system-title">
-                        <p id="system-name">Bahay ni Kuya</p>
-                        <p id="system-label">A Sensor Integrated Home System</p>
+                    <div id="nav-title">
+                        <img src="./images/logo-black.png" alt="logo" id="logo-img">
+                        <div id="system-title">
+                            <p id="system-name">Bahay ni Kuya</p>
+                            <p id="system-label">A Sensor Integrated Home System</p>
+                        </div>
                     </div>
-                </div>
 
 
-            <img src="./images/control-black.png" alt="control" class="control-button1">
+                <img src="./images/control-black.png" alt="control" class="control-button1">
 
-        </nav>
-
-
-
-        <div id="control-menu">
-                
-            <nav id="control-nav">
-                <img src="./images/control-black.png" alt="control" class="control-button2">
-
-                <label class="switch" id="top-darkmode-switch">
-                    <input type="checkbox" id="darkModeToggle">
-                    <span class="slider"></span>
-                </label>
             </nav>
 
-            <div class="control-content">
 
-                <div class="control-header">
-                    <h1>Controls</h1>
-                </div>
 
-                <!-- DOOR SECTION -->
-                <div class="control-section">
-                    <h3>Door</h3>
-            
-                    <div class="control-row">
-                        <span>Main Door</span>
+            <div id="control-menu">
+                    
+                <nav id="control-nav">
+                    <img src="./images/control-black.png" alt="control" class="control-button2">
 
-                        <div class="toggle-container">
-                            <span>CLOSE</span>
-                            <label class="switch">
-                                <input type="checkbox" id="door-control">
-                                <span class="slider"></span>
-                            </label>
-                            <span>OPEN</span>
-                        </div>
-                    </div>
-                </div>
+                    <label class="switch" id="top-darkmode-switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </nav>
 
-                <!-- LIGHTS SECTION -->
-                <div class="control-section">
-                    <h3>Lights</h3>
+                <div class="control-content">
 
-                    <div class="control-row">
-                        <span>Room 1</span>
-                        <div class="toggle-container">
-                            <span>OFF</span>
-                            <label class="switch">
-                                <input type="checkbox" id="room1Control">
-                                <span class="slider"></span>
-                            </label>
-                            <span>ON</span>
-                        </div>
+                    <div class="control-header">
+                        <h1>Controls</h1>
                     </div>
 
-                    <div class="control-row">
-                        <span>Room 2</span>
-                        <div class="toggle-container">
-                            <span>OFF</span>
-                            <label class="switch">
-                                <input type="checkbox" id="room2Control">
-                                <span class="slider"></span>
-                            </label>
-                            <span>ON</span>
-                        </div>
-                    </div>
-
-                </div>
-
-        
-                <div class="control-section">
-                    <h3>Buzzer</h3>
-
-                    <div class="control-row">
-                        <span>Trigger Alarm</span>
-                        <div class="toggle-container">
-                            <span>OFF</span>
-                            <label class="switch">
-                                <input type="checkbox" id="trigger-alarm">
-                                <span class="slider"></span>
-                            </label>
-                            <span>ON</span>
-                        </div>
-                    </div>
-                </div>
-
-               
-                 <!-- EVENT SENSORS -->
-
-                <div class="control-header">
-                    <h1>Events</h1>
-                </div>
-
-                <div id="event-sensors">
-                    <div class="event-card" id="capacitive-card">
-                        <div class="event-header">
-                            <img src="./images/capacitive-icon.png" alt="capacitive">
-                            <p>Authentication</p>
-                        </div>
-                        <p id="capacitive-status">Idle</p>
-                    </div>
-
-                    <div class="event-card" id="sound-card">
-                        <div class="event-header">
-                            <img src="./images/sound-dark.png" alt="sound">
-                            <p>Clap Detection</p>
-                        </div>
-                        <p id="soundSenStatus">--</p>
-                    </div>
-
-                    <div class="event-card" id="ultrasonic-card">
-                        <div class="event-header">
-                            <img src="./images/ultrasonic-icon.png" alt="ultrasonic">
-                            <p>Object Detection</p>
-                        </div>
-                        <p id="ultrasonic-status">--</p>
-                    </div>
-                </div>
-
-
-
-            </div> 
-        </div> 
-
-
-
-
-            
-
-            
-            <div id="sensor-readings">  
+                    <!-- DOOR SECTION -->
+                    <div class="control-section">
+                        <h3>Door</h3>
                 
-                <div class="column">
-                    <div class="column-header">
-                        <h2>Home Status</h2>
-                    </div>
+                        <div class="control-row">
+                            <span>Main Door</span>
 
-                    <table>
-                        <tr>
-                            <td>Door</td>
-                            <td id="door-status"></td>
-                        </tr>
-
-                        <tr id="room1">
-                            <td>Room 1 Lights</td>
-                            <td id="room1State"></td>
-                        </tr>
-
-                        <tr>
-                            <td>Room 2 Lights</td>
-                           <td id="room2State"></td>
-                        </tr>
-                        <!--
-                        <tr>
-                            <td>Capacitive Sensor</td>
-                            <td id="capacitive-status"></td>
-                        </tr>-->
-
-                        <tr>
-                            <td>Buzzer</td>
-                            <td id="buzzer-status"></td>
-                        </tr>
-                        <!--
-                         <tr>
-                            <td>Sound Sensor</td>
-                            <td id="soundSenStatus"></td>
-                        </tr>
-
-                        <tr>
-                            <td>Ultrasonic Sensor</td>
-                            <td id="ultrasonic-status"></td>
-                        </tr>-->
-
-
-
-
-                    </table>
-                </div>
-
-                <div class="column">
-                    <div class="column-header">
-                        <h2>Sensor Readings</h2>
-                    </div>
-
-                    <div id="sensor-readings-content">
-                        <div class="parent-box">
-                            <div class="box" sensor-data="temperature">
-                                <div class="box-content">
-                                    <img src="./images/temperature-red.png" alt="temperature-icon" id="temperature">
-                                    <p id="temp-value"></p>
-                                </div>
-                                <p>Temperature</p>
-                            </div>
-
-                            <div class="box" sensor-data="humidity">
-                                <div class="box-content"> 
-                                    <img src="./images/humidity-dark.png" alt="humidity-icon" id="humidity">
-                                    <p id="humid-value"></p>
-                                </div>
-                                <p>Humidity</p>
-                            </div>
-                        </div>
-
-
-                        <div class="parent-box">
-                            <div class="box" sensor-data="light">
-                                <div class="box-content">
-                                    <img src="./images/light-dark.png" alt="light-icon" id="light">
-                                    <p id="light-value"></p>
-                                </div>
-                                <p>Light Intensity</p>
-
-                            </div>
-
-                            <div class="box" sensor-data="sound">
-                                <div class="box-content">
-                                    <img src="./images/sound-dark.png" alt="sound-icon" id="sound">
-                                    <p id="sound-value"></p>
-                                </div>
-                                <p>Sound Value</p>
+                            <div class="toggle-container">
+                                <span>CLOSE</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="door-control">
+                                    <span class="slider"></span>
+                                </label>
+                                <span>OPEN</span>
                             </div>
                         </div>
                     </div>
+
+                    <!-- LIGHTS SECTION -->
+                    <div class="control-section">
+                        <h3>Lights</h3>
+
+                        <div class="control-row">
+                            <span>Room 1</span>
+                            <div class="toggle-container">
+                                <span>OFF</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="room1Control">
+                                    <span class="slider"></span>
+                                </label>
+                                <span>ON</span>
+                            </div>
+                        </div>
+
+                        <div class="control-row">
+                            <span>Room 2</span>
+                            <div class="toggle-container">
+                                <span>OFF</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="room2Control">
+                                    <span class="slider"></span>
+                                </label>
+                                <span>ON</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+            
+                    <div class="control-section">
+                        <h3>Buzzer</h3>
+
+                        <div class="control-row">
+                            <span>Trigger Alarm</span>
+                            <div class="toggle-container">
+                                <span>OFF</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="trigger-alarm">
+                                    <span class="slider"></span>
+                                </label>
+                                <span>ON</span>
+                            </div>
+                        </div>
+                    </div>
+
+                
+                    <!-- EVENT SENSORS -->
+
+                    <div class="control-header">
+                        <h1>Events</h1>
+                    </div>
+
+                    <div id="event-sensors">
+                        <div class="event-card" id="capacitive-card">
+                            <div class="event-header">
+                                <img src="./images/fingerprint.png" alt="capacitive">
+                                <!--<p>Authentication</p>-->
+                            </div>
+                            <p id="capacitive-status">ESP OFFLINE</p>
+                        </div>
+
+                        <div class="event-card" id="sound-card">
+                            <div class="event-header">
+                                <img src="./images/sound-dark.png" alt="sound">
+                                <!--<p>Clap Detection</p>-->
+                            </div>
+                            <p id="soundSenStatus">ESP OFFLINE</p>
+                        </div>
+
+                        <div class="event-card" id="ultrasonic-card">
+                            <div class="event-header">
+                                <img src="./images/radar.png" alt="ultrasonic">
+                                <!--<p>Object Detection</p>-->
+                            </div>
+                            <p id="ultrasonic-status">ESP OFFLINE</p>
+                        </div>
+                    </div>
+
+
+
+                </div> 
+            </div> 
+
+
+
+
+                
+
+                
+                <div id="sensor-readings">  
+                    
+                    <div class="column">
+                        <div class="column-header">
+                            <h2>Home Status</h2>
+                        </div>
+
+                        <table>
+                            <tr>
+                                <td>Door</td>
+                                <td id="door-status"></td>
+                            </tr>
+
+                            <tr id="room1">
+                                <td>Room 1 Lights</td>
+                                <td id="room1State"></td>
+                            </tr>
+
+                            <tr>
+                                <td>Room 2 Lights</td>
+                            <td id="room2State"></td>
+                            </tr>
+                            <!--
+                            <tr>
+                                <td>Capacitive Sensor</td>
+                                <td id="capacitive-status"></td>
+                            </tr>-->
+
+                            <tr>
+                                <td>Buzzer</td>
+                                <td id="buzzer-status"></td>
+                            </tr>
+                            <!--
+                            <tr>
+                                <td>Sound Sensor</td>
+                                <td id="soundSenStatus"></td>
+                            </tr>
+
+                            <tr>
+                                <td>Ultrasonic Sensor</td>
+                                <td id="ultrasonic-status"></td>
+                            </tr>-->
+
+
+
+
+                        </table>
+                    </div>
+
+                    <div class="column">
+                        <div class="column-header">
+                            <h2>Sensor Readings</h2>
+                        </div>
+
+                        <div id="sensor-readings-content">
+                            <div class="parent-box">
+                                <div class="box" sensor-data="temperature">
+                                    <div class="box-content">
+                                        <img src="./images/temperature-red.png" alt="temperature-icon" id="temperature">
+                                        <p id="temp-value"></p>
+                                    </div>
+                                    <p>Temperature</p>
+                                </div>
+
+                                <div class="box" sensor-data="humidity">
+                                    <div class="box-content"> 
+                                        <img src="./images/humidity-dark.png" alt="humidity-icon" id="humidity">
+                                        <p id="humid-value"></p>
+                                    </div>
+                                    <p>Humidity</p>
+                                </div>
+                            </div>
+
+
+                            <div class="parent-box">
+                                <div class="box" sensor-data="light">
+                                    <div class="box-content">
+                                        <img src="./images/light-dark.png" alt="light-icon" id="light">
+                                        <p id="light-value"></p>
+                                    </div>
+                                    <p>Light Intensity</p>
+
+                                </div>
+
+                                <div class="box" sensor-data="sound">
+                                    <div class="box-content">
+                                        <img src="./images/sound-dark.png" alt="sound-icon" id="sound">
+                                        <p id="sound-value"></p>
+                                    </div>
+                                    <p>Sound Value</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
-            </div>
-
-  
+    
 
 
 
 
+                    <!--
+                    <footer>
+                    
 
-        <footer>
-         
+                        <div class="footer-content">
 
-            <div class="footer-content">
+                            <div class="footer-logo">
+                                <img src="./images/logo-black.png" alt="logo" id="footer-logo">
+                                <p>Bahay ni Kuya: A Sensor Integrated<br> Home System</p>
+                                <p class="footer-subtitle">Submitted in partial fulfillment of CPEN 85 & CPEN 101</p>
+                                <p class="footer-subtitle">Cavite State University – Carmona Campus</p>
+                            </div>
 
+                            <div class="footer-column">
+                                <p class="footer-title">Team Members:</p>
+                            </div>
+
+                            <div class="footer-column">
+                                <p>Jannah Mae J. Gaspar</p>
+                                <p>Angelo Gripon Jr.</p>
+                                <p>Jay Johnlie Galo</p>
+                            </div>
+
+                            <div class="footer-column">
+                                <p>Jeremy Yuan D. Ancheta</p>
+                                <p>Marcus Kyle G. Miranda</p>
+                            </div>
+
+                                <div class="footer-column">
+                                <p>Shiena Rose B. Madridano</p>
+                                <p>Genesis Moises C. Baldonasa</p>
+                            </div>
+
+                        </div>
+
+                
+
+                
+                    </footer>-->
+            <!--<footer class="dashboard-footer">
+            <div class="footer-inner">
+
+                
                 <div class="footer-logo">
-                    <img src="./images/logo-black.png" alt="logo" id="footer-logo">
-                    <p>Bahay ni Kuya: A Sensor Integrated<br> Home System</p>
-                    <p class="footer-subtitle">Submitted in partial fulfillment of CPEN 85 & CPEN 101</p>
-                     <p class="footer-subtitle">Cavite State University – Carmona Campus</p>
+                                <img src="./images/logo-black.png" alt="logo" id="footer-logo">
+                                <p>Bahay ni Kuya: A Sensor Integrated<br> Home System</p>
+                                <p class="footer-subtitle">Submitted in partial fulfillment of CPEN 85 & CPEN 101</p>
+                                <p class="footer-subtitle">Cavite State University – Carmona Campus</p>
+                            </div>
+                
+
+            
+                <div class="footer-col">
+                <h3>Team Members</h3>
+                <ul>
+                    <li>Jannah Mae J. Gaspar</li>
+                    <li>Angelo Gripon Jr.</li>
+                    <li>Jeremy Yuan D. Ancheta</li>
+                    <li>Marcus Kyle G. Miranda</li>
+                </ul>
                 </div>
 
-                <div class="footer-column">
-                    <p class="footer-title">Team Members:</p>
+            
+                <div class="footer-col">
+                <h3>...</h3>
+                <ul>
+                    <li>Genesis Moises C. Baldonasa</li>
+                    <li>Shiena Rose B. Madridano</li>
+                    <li>Jay Johnlie Galo</li>
+                
+                </ul>
                 </div>
 
-                <div class="footer-column">
-                    <p>Jannah Mae J. Gaspar</p>
-                    <p>Angelo Gripon Jr.</p>
-                    <p>Jay Johnlie Galo</p>
-                </div>
 
-                <div class="footer-column">
-                    <p>Jeremy Yuan D. Ancheta</p>
-                    <p>Marcus Kyle G. Miranda</p>
-                </div>
-
-                    <div class="footer-column">
-                    <p>Shiena Rose B. Madridano</p>
-                    <p>Genesis Moises C. Baldonasa</p>
+                <div class="footer-col">
+                <h3>Account</h3>
+                <button id="logout-button">Logout</button>
                 </div>
 
             </div>
 
-    
-
-    
-        </footer>
-
-        <div id="alert-notification" class="alert"> 
-            <div class="alert-content">
-                <strong>SECURITY ALERT</strong>
-                <p>Multiple failed door attempts detected.</p>
-                </div>
-                <div class="alert-progress">
-                <div class="alert-bar"></div>
+            <div class="footer-bottom">
+                © 2025 Bahay ni Kuya. All Rights Reserved.
             </div>
-        </div>
+            </footer>-->
+            </main>
+            <footer>
+            
+                <div class="container">
+                    <div class="footer-col-1">
+                        <img src="./images/logo-black.png" alt="logo-png">
+                        <p>Bahay ni Kuya: A Sensor Integrated<br> Home System</p>
+                        <p class="footer-subtitle">Submitted in partial fulfillment of CPEN 85 & CPEN 101</p>
+                            <p class="footer-subtitle">Cavite State University – Carmona Campus</p>
+                    </div>
+                    <div class="footer-col-2">
+                        <h3>System Features</h3>
+                        <ul>
+                            <li>Temperature & Humidity Monitoring</li>
+                            <li>Sound & Motion Detection</li>
+                            <li>Smart Lighting Control</li>
+                            <li>Door & Access Monitoring</li>
+                            <li>Real-time Dashboard</li>
+                            <li>Local Network COntrol</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-col-4">
+                        <h3>Newsletter</h3>
+                        <form>
+                            <i class="far fa-envelope"></i>
+                            <input type="email" placeholder="Enter your email" required>
+                            <button><i class="fas fa-arrow-right"></i></button>
+                        </form>
+                        <div class="social-icons">
+                            <h3>Team Members:</h3>
+                            <a href="#" class="icon" data-label="Genesis Moises Baldonasa"><img src="" alt=""></a>
+                            <a href="#" class="icon" data-label="Marcus"><img src="" alt=""></a>
+                            <a href="#" class="icon" data-label="Jeremy Yuan Ancheta"><img src="" alt=""></a>
+                            <a href="#" class="icon" data-label="Janna Gaspar"><img src="" alt=""></a>
+                            <a href="#" class="icon" data-label="Ayuk"><img src="" alt=""></a>
+                            <a href="#" class="icon" data-label="Shienna"><img src="" alt=""></a>
+                            <a href="#" class="icon" data-label="Galo"><img src="" alt=""></a>
+                            
+                        </div>
+                    </div>
+
+                    <div class="footer-col-3">
+                        <h3>Account</h3>
+                        <ul>
+                            <button id="logout-button">Logout</button>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>© 2025 | Bahay ni Kuya</p>
+                </div>
+            
+            </footer>
+
+
+            <script>
+                document.getElementById("logout-button").addEventListener("click", () => {
+                    // Example: clear session and go to login
+                    localStorage.clear();
+                    window.location.href = "/login/login.html";
+                });
+            </script>
 
 
 
 
-        <script>
-            const panel = document.getElementById("control-menu");
-            const button1 = document.querySelector(".control-button1");
-            const button2 = document.querySelector(".control-button2");
 
-            // Function to get the current control menu width from CSS variable
-            function getMenuWidth() {
-            return getComputedStyle(document.documentElement).getPropertyValue('--control-menu-width') || '25%';
-            }
+            <div id="alert-notification" class="alert"> 
+                <div class="alert-content">
+                    <strong>SECURITY ALERT</strong>
+                    <p>Multiple failed door attempts detected.</p>
+                    </div>
+                    <div class="alert-progress">
+                    <div class="alert-bar"></div>
+                </div>
+            </div>
 
-            function openPanel() {
-                panel.style.width = getMenuWidth();
-                button2.style.transform = "rotate(270deg)";
-                button1.style.transform = "rotate(270deg)";
-            }
 
-            function closePanel() {
-                panel.style.width = "0";
-                button2.style.transform = "rotate(0deg)";
-                button1.style.transform = "rotate(0deg)"; // rotate back when closing
-            }
 
-            button1.addEventListener("click", (e) => {
-                e.stopPropagation();
-                if (panel.style.width === getMenuWidth()) {
-                    closePanel();
-                } else {
-                    openPanel();
+
+            <script>
+                const panel = document.getElementById("control-menu");
+                const button1 = document.querySelector(".control-button1");
+                const button2 = document.querySelector(".control-button2");
+
+                // Function to get the current control menu width from CSS variable
+                function getMenuWidth() {
+                return getComputedStyle(document.documentElement).getPropertyValue('--control-menu-width') || '25%';
                 }
-            });
 
-            // Toggle panel when button2 clicked
-            button2.addEventListener("click", (e) => {
-                e.stopPropagation();
-                closePanel();
-            });
+                function openPanel() {
+                    panel.style.width = getMenuWidth();
+                    button2.style.transform = "rotate(270deg)";
+                    button1.style.transform = "rotate(270deg)";
+                }
 
-
-            document.addEventListener("click", (e) => {
-                if (!panel.contains(e.target) && panel.style.width === getMenuWidth()) {
+                function closePanel() {
                     panel.style.width = "0";
                     button2.style.transform = "rotate(0deg)";
-                    button1.style.transform = "rotate(0deg)";
-                }
-            });
-        </script>
-
-        <script>
-                let lastDHTSave = 0;
-                async function updateDHT() {
-                    try {
-                        const response = await fetch('/sensor-data');
-                        const data = await response.json();
-                        
-                        document.getElementById('temp-value').innerText = (data.temperature !== undefined ? data.temperature.toFixed(2) : '--') + ' C';
-            
-
-                        document.getElementById('humid-value').innerText = (data.humidity !== undefined ? data.humidity.toFixed(2) : '--') + ' %';
-                        const now = Date.now();
-                        if (now - lastDHTSave >= 10000) {
-                            pushValue('temperature', data.temperature);
-                            pushValue('humidity', data.humidity);
-                            lastDHTSave = now;
-
-                            if (chart) chart.update();
-                        }
-                        
-                    } catch (error) {
-                        console.error('Error fetching sensor data:', error);
-                    }
+                    button1.style.transform = "rotate(0deg)"; // rotate back when closing
                 }
 
-                async function updateSound() {
-                    try {
-                        const response = await fetch('/sound-data');
-                        const data = await response.json();
-
-                        document.getElementById('sound-value').innerText = (data.sound !== undefined ? data.sound : '--');
-                        document.getElementById('soundSenStatus').innerText = data.clapDetected || '--';
-                        pushValue('sound', Number(data.sound)); //for graph
-                        if (chart) chart.update();
-
-     
-
+                button1.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    if (panel.style.width === getMenuWidth()) {
+                        closePanel();
+                    } else {
+                        openPanel();
                     }
-                    catch (error) {
-                        console.error('Sound fetch error: ', error);
+                });
 
+                // Toggle panel when button2 clicked
+                button2.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    closePanel();
+                });
+
+
+                document.addEventListener("click", (e) => {
+                    if (!panel.contains(e.target) && panel.style.width === getMenuWidth()) {
+                        panel.style.width = "0";
+                        button2.style.transform = "rotate(0deg)";
+                        button1.style.transform = "rotate(0deg)";
                     }
-                }
-                    setInterval(updateDHT, 2000); // Update every 2 seconds
-                    updateDHT();
-                    setInterval(updateSound, 200); // Update every 200 milliseconds
-                    updateSound();
+                });
+            </script>
 
-
+            <script>
+                    let lastDHTSave = 0;
+                    async function updateDHT() {
+                        try {
+                            const response = await fetch('/sensor-data');
+                            const data = await response.json();
+                            
+                            document.getElementById('temp-value').innerText = (data.temperature !== undefined ? data.temperature.toFixed(2) : '--') + ' C';
                 
-            
-        </script>
 
-        <script>
+                            document.getElementById('humid-value').innerText = (data.humidity !== undefined ? data.humidity.toFixed(2) : '--') + ' %';
+                            const now = Date.now();
+                            if (now - lastDHTSave >= 10000) {
+                                pushValue('temperature', data.temperature);
+                                pushValue('humidity', data.humidity);
+                                lastDHTSave = now;
 
-            async function updateLDR() {
-                try {
-                const response = await fetch('/ldr-data'); // call ESP32 endpoint
-                const data = await response.json();
+                                if (chart) chart.update();
+                            }
+                            
+                        } catch (error) {
+                            console.error('Error fetching sensor data:', error);
+                        }
+                    }
 
-                // Update the <p id="light-value">
-                document.getElementById('light-value').innerText = 
-                (data.light !== undefined ? data.light : '--') + ' Lx';
-                pushValue('light', data.light);
-                if (chart) chart.update();
+                    async function updateSound() {
+                        try {
+                            const response = await fetch('/sound-data');
+                            const data = await response.json();
+
+                            document.getElementById('sound-value').innerText = (data.sound !== undefined ? data.sound : '--');
+                            document.getElementById('soundSenStatus').innerText = data.clapDetected || '--';
+                            pushValue('sound', Number(data.sound)); //for graph
+                            if (chart) chart.update();
+
+        
+
+                        }
+                        catch (error) {
+                            console.error('Sound fetch error: ', error);
+
+                        }
+                    }
+                        setInterval(updateDHT, 2000); // Update every 2 seconds
+                        updateDHT();
+                        setInterval(updateSound, 200); // Update every 200 milliseconds
+                        updateSound();
+
+
+                    
+                
+            </script>
+
+            <script>
+
+                async function updateLDR() {
+                    try {
+                    const response = await fetch('/ldr-data'); // call ESP32 endpoint
+                    const data = await response.json();
+
+                    // Update the <p id="light-value">
+                    document.getElementById('light-value').innerText = 
+                    (data.light !== undefined ? data.light : '--') + ' Lx';
+                    pushValue('light', data.light);
+                    if (chart) chart.update();
 
 
 
-                } 
-                catch (error) {
-                    console.error('Error fetching LDR data:', error);
+                    } 
+                    catch (error) {
+                        console.error('Error fetching LDR data:', error);
+                    }
+                
                 }
-               
-            }
-                updateLDR();
-                setInterval(updateLDR, 200);
+                    updateLDR();
+                    setInterval(updateLDR, 200);
 
-        </script>
+            </script>
 
 
 
-        <!--
-        <script>
-            async function updateLEDStates() {
+            <!--
+            <script>
+                async function updateLEDStates() {
+                    try {
+                        const response = await fetch('/led-status');
+                        const data = await response.json();
+
+                        // Update table cells
+                        document.getElementById('room1State').innerText = data.ldr || '--';
+                        document.getElementById('room2State').innerText = data.sound || '--';
+                    } 
+
+                    catch (error) {
+                        console.error('Error fetching LED states:', error);
+                    }
+                }
+
+                // Update every 200ms
+                setInterval(updateLEDStates, 200);
+                updateLEDStates();
+            </script> -->
+
+            <script>
+                async function updateLEDStates() {
                 try {
                     const response = await fetch('/led-status');
                     const data = await response.json();
 
-                    // Update table cells
-                    document.getElementById('room1State').innerText = data.ldr || '--';
-                    document.getElementById('room2State').innerText = data.sound || '--';
-                } 
+                    // Get table cells
+                    const room1Cell = document.getElementById('room1State');
+                    const room2Cell = document.getElementById('room2State');
 
-                catch (error) {
+                    // Update text
+                    room1Cell.innerText = data.ldr || '--';
+                    room2Cell.innerText = data.sound || '--';
+
+                    // Set color based on state
+                    room1Cell.style.color = data.ldr === 'ON' ? 'green' : 'red';
+                    room2Cell.style.color = data.sound === 'ON' ? 'green' : 'red';
+
+                    // Update checkboxes
+                    document.getElementById('room1Control').checked = data.ldr === 'ON';
+                    document.getElementById('room2Control').checked = data.sound === 'ON';
+
+                } catch (error) {
                     console.error('Error fetching LED states:', error);
                 }
             }
-
-            // Update every 200ms
-            setInterval(updateLEDStates, 200);
-            updateLEDStates();
-        </script> -->
-
-        <script>
-            async function updateLEDStates() {
-            try {
-                const response = await fetch('/led-status');
-                const data = await response.json();
-
-                // Get table cells
-                const room1Cell = document.getElementById('room1State');
-                const room2Cell = document.getElementById('room2State');
-
-                // Update text
-                room1Cell.innerText = data.ldr || '--';
-                room2Cell.innerText = data.sound || '--';
-
-                // Set color based on state
-                room1Cell.style.color = data.ldr === 'ON' ? 'green' : 'red';
-                room2Cell.style.color = data.sound === 'ON' ? 'green' : 'red';
-
-                // Update checkboxes
-                document.getElementById('room1Control').checked = data.ldr === 'ON';
-                document.getElementById('room2Control').checked = data.sound === 'ON';
-
-            } catch (error) {
-                console.error('Error fetching LED states:', error);
-            }
-        }
-                setInterval(updateLEDStates, 200);
-                updateLEDStates();
-        </script>
+                    setInterval(updateLEDStates, 200);
+                    updateLEDStates();
+            </script>
 
 
-        <script>
-        document.getElementById('room1Control').addEventListener('change', async () => {
-            let state = document.getElementById('room1Control').checked ? 'on' : 'off';
-            await fetch(`/room1?state=${state}`);
-        });
-
-        document.getElementById('room2Control').addEventListener('change', async () => {
-            let state = document.getElementById('room2Control').checked ? 'on' : 'off';
-            await fetch(`/room2?state=${state}`);
-        });
-        </script>
-
-
-
-        <script>
-             const doorControl = document.getElementById('door-control');
-             //const doorStatus = document.getElementById('door-status');
-            
-             doorControl.addEventListener('change', async () => {
-                let state = doorControl.checked ? 'open' : 'close';
-                try {
-                    const response = await fetch('/door?state=' + state);
-                    if (!response.ok) throw new Error('Network response not ok');
-                    console.log('Door command sent: ', state);
-                } catch (error) {
-                    console.error('Error sending door command:', error);
-
-
-                }
-                //doorStatus.innerText = state === 'open' ? 'OPEN' : 'CLOSED';
+            <script>
+            document.getElementById('room1Control').addEventListener('change', async () => {
+                let state = document.getElementById('room1Control').checked ? 'on' : 'off';
+                await fetch(`/room1?state=${state}`);
             });
-            //doorStatus.innerText = doorControl.checked ? 'OPEN' : 'CLOSED';
 
-        </script>
+            document.getElementById('room2Control').addEventListener('change', async () => {
+                let state = document.getElementById('room2Control').checked ? 'on' : 'off';
+                await fetch(`/room2?state=${state}`);
+            });
+            </script>
 
-       
-        <script>
-            const doorStatus = document.getElementById('door-status');
 
-            async function updateDoorStatus() {
-                try {
-                    const response = await fetch('/door-status');
-                    const data = await response.json();
-                    doorStatus.innerText = data.door;
-                    doorStatus.style.color = data.door === 'OPEN' ? 'green' : 'red';
-                } catch (error) {
-                    console.error('Error fetching door status:', error);
-                    doorStatus.innerText = '--';
-                }
+
+            <script>
+                const doorControl = document.getElementById('door-control');
+                //const doorStatus = document.getElementById('door-status');
                 
-            }
+                doorControl.addEventListener('change', async () => {
+                    let state = doorControl.checked ? 'open' : 'close';
+                    try {
+                        const response = await fetch('/door?state=' + state);
+                        if (!response.ok) throw new Error('Network response not ok');
+                        console.log('Door command sent: ', state);
+                    } catch (error) {
+                        console.error('Error sending door command:', error);
 
-            // Update every 500ms
-         
-            setInterval(updateDoorStatus, 500);
-            updateDoorStatus();
-            
 
-        </script>
+                    }
+                    //doorStatus.innerText = state === 'open' ? 'OPEN' : 'CLOSED';
+                });
+                //doorStatus.innerText = doorControl.checked ? 'OPEN' : 'CLOSED';
 
+            </script>
 
-            <!-- Modal -->
-        <div id="sensor-modal" class="modal hidden">
-            <div class="modal-content">
-                <span id="close-modal">&times;</span>
-                <h2 id="modal-title">Sensor Data</h2>
-                <div id="modal-graph">
-                    <canvas id="sensorChart"></canvas>
+        
+            <script>
+                const doorStatus = document.getElementById('door-status');
+
+                async function updateDoorStatus() {
+                    try {
+                        const response = await fetch('/door-status');
+                        const data = await response.json();
+                        doorStatus.innerText = data.door;
+                        doorStatus.style.color = data.door === 'OPEN' ? 'green' : 'red';
+                    } catch (error) {
+                        console.error('Error fetching door status:', error);
+                        //doorStatus.innerText = '--';
+                    }
                     
+                }
+
+                // Update every 500ms
+            
+                setInterval(updateDoorStatus, 500);
+                updateDoorStatus();
+                
+
+            </script>
+
+
+                <!-- Modal -->
+            <div id="sensor-modal" class="modal hidden">
+                <div class="modal-content">
+                    <span id="close-modal">&times;</span>
+                    <h2 id="modal-title">Sensor Data</h2>
+                    <div id="modal-graph">
+                        <canvas id="sensorChart"></canvas>
+                        
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <script>
-            const boxes = document.querySelectorAll('.box');
-            const modal = document.getElementById('sensor-modal');
-            const closeModal = document.getElementById('close-modal');
-            const modalTitle = document.getElementById('modal-title');
+            <script>
+                const boxes = document.querySelectorAll('.box');
+                const modal = document.getElementById('sensor-modal');
+                const closeModal = document.getElementById('close-modal');
+                const modalTitle = document.getElementById('modal-title');
 
-            boxes.forEach(box => {
-                box.addEventListener('click', () => {
-                    const sensor = box.getAttribute('sensor-data');
-                    modalTitle.innerText = sensor.charAt(0).toUpperCase() + sensor.slice(1) + " Data";
-                    modal.classList.remove('hidden');
-                    createChart(sensor);
-                });
-            });
-
-            closeModal.addEventListener('click', () => {
-                modal.classList.add('hidden');
-            });
-
-            //close modal when clicking outside content
-            modal.addEventListener('click', (e) => {
-                if(e.target === modal) modal.classList.add('hidden');
-            });
-        </script>
-
-        <!--history buffer-->
-
-        <script>
-            const history = {
-                temperature: [],
-                humidity: [],
-                light: [],
-                sound: []
-            };
-
-            const MAX_POINTS = {
-                temperature: 30, 
-                humidity: 30,
-                light: 50,
-                sound: 50
-            };
-
-            function pushValue(sensor, value) {
-                if (value === undefined || isNaN(value)) return;
-
-                history[sensor].push({
-                    x: new Date(),
-                    y: value
+                boxes.forEach(box => {
+                    box.addEventListener('click', () => {
+                        const sensor = box.getAttribute('sensor-data');
+                        modalTitle.innerText = sensor.charAt(0).toUpperCase() + sensor.slice(1) + " Data";
+                        modal.classList.remove('hidden');
+                        createChart(sensor);
+                    });
                 });
 
-                if (history[sensor].length > MAX_POINTS[sensor]) {
-                    history[sensor].shift();
+                closeModal.addEventListener('click', () => {
+                    modal.classList.add('hidden');
+                });
+
+                //close modal when clicking outside content
+                modal.addEventListener('click', (e) => {
+                    if(e.target === modal) modal.classList.add('hidden');
+                });
+            </script>
+
+            <!--history buffer-->
+
+            <script>
+                const history = {
+                    temperature: [],
+                    humidity: [],
+                    light: [],
+                    sound: []
+                };
+
+                const MAX_POINTS = {
+                    temperature: 30, 
+                    humidity: 30,
+                    light: 50,
+                    sound: 50
+                };
+
+                function pushValue(sensor, value) {
+                    if (value === undefined || isNaN(value)) return;
+
+                    history[sensor].push({
+                        x: new Date(),
+                        y: value
+                    });
+
+                    if (history[sensor].length > MAX_POINTS[sensor]) {
+                        history[sensor].shift();
+                    }
+                }
+
+                
+            </script>
+
+            <script>
+                let chart;
+
+                function createChart(sensor) {
+                    const ctx = document.getElementById('sensorChart').getContext('2d');
+
+                    if (chart) chart.destroy();
+                    const isDarkMode = document.body.classList.contains('dark-mode');
+
+                    chart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            datasets: [{
+                                label: sensor.toUpperCase(),
+                                data: history[sensor],
+                                borderWidth: 2,
+                                tension: 0.3,
+                                pointRadius: 2,
+                                fill: false,
+                                borderColor: isDarkMode ? 'white' : 'black', // line color
+                                backgroundColor: isDarkMode ? 'white' : 'black', // point color
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            animation: false,
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: isDarkMode ? 'white' : 'black' // legend text color
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    type: 'time',
+                                    time: {
+                                        unit: sensor === 'temperature' || sensor === 'humidity' ? 'minute' : 'second'
+                                    },
+                                    ticks: {
+                                        color: isDarkMode ? 'white' : 'black' // x-axis labels
+                                    },
+                                    grid: {
+                                        color: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)' // grid lines
+                                    }
+                                },
+
+
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        color: isDarkMode ? 'white' : 'black' // y-axis labels
+                                    },
+                                    grid: {
+                                        drawTicks: true,
+                                        color: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)' // grid lines
+                                    }
+                                }
+
+                            }
+                        }
+                    });
+                }
+            </script>
+
+            <script>
+
+                const toggle = document.getElementById("darkModeToggle");
+
+        
+                if (localStorage.getItem("theme") === "dark") {
+                    document.body.classList.add("dark-mode");
+                    toggle.checked = true;
+                }
+
+                toggle.addEventListener("change", () => {
+                    if (toggle.checked) {
+                        document.body.classList.add("dark-mode");
+                        localStorage.setItem("theme", "dark");
+                    } else {
+                        document.body.classList.remove("dark-mode");
+                        localStorage.setItem("theme", "light");
+                    }
+                });
+
+            
+
+            </script>
+
+            <script>
+            let lastAlarmTime = 0;
+
+            async function checkAlarm() {
+                try {
+                    const res = await fetch('/alarm-status');
+                    const data = await res.json();
+
+                    if (data.alarm && data.time !== lastAlarmTime) {
+                        lastAlarmTime = data.time;
+                        showAlert();
+                    }
+                } catch (err) {
+                    console.error("Alarm check failed", err);
                 }
             }
 
-            
-        </script>
+            function showAlert() {
+                const alertBox = document.getElementById('alert-notification');
+                const bar = alertBox.querySelector('.alert-bar');
 
-        <script>
-            let chart;
+                // reset animation
+                bar.style.animation = 'none';       
+                bar.offsetHeight;
+                bar.style.animation = 'alertProgress 5s linear forwards';
 
-            function createChart(sensor) {
-                const ctx = document.getElementById('sensorChart').getContext('2d');
+                alertBox.classList.add('show');
 
-                if (chart) chart.destroy();
-                const isDarkMode = document.body.classList.contains('dark-mode');
+                setTimeout(() => {
+                    alertBox.classList.remove('show');
+                }, 5000);
+            }
+            setInterval(checkAlarm, 500);
 
-                chart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        datasets: [{
-                            label: sensor.toUpperCase(),
-                            data: history[sensor],
-                            borderWidth: 2,
-                            tension: 0.3,
-                            pointRadius: 2,
-                            fill: false,
-                            borderColor: isDarkMode ? 'white' : 'black', // line color
-                            backgroundColor: isDarkMode ? 'white' : 'black', // point color
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        animation: false,
-                        plugins: {
-                            legend: {
-                                labels: {
-                                    color: isDarkMode ? 'white' : 'black' // legend text color
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                type: 'time',
-                                time: {
-                                    unit: sensor === 'temperature' || sensor === 'humidity' ? 'minute' : 'second'
-                                },
-                                ticks: {
-                                    color: isDarkMode ? 'white' : 'black' // x-axis labels
-                                },
-                                grid: {
-                                    color: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)' // grid lines
-                                }
-                            },
+            </script>
 
+            <script>
+                const alarmCheckbox = document.getElementById('trigger-alarm');
 
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    color: isDarkMode ? 'white' : 'black' // y-axis labels
-                                },
-                                grid: {
-                                    drawTicks: true,
-                                    color: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)' // grid lines
-                                }
-                            }
-
-                        }
+                alarmCheckbox.addEventListener('change', async () => {
+                    const state = alarmCheckbox.checked ? 'on' : 'off';
+                    try {
+                        await fetch(`/alarm-toggle?state=${state}`);
+                    } catch (err) {
+                        console.error("Failed to toggle alarm:", err);
                     }
                 });
-            }
-</script>
+            </script>
 
-    <script>
+            <script>
+                async function updateBuzzerStatus() {
+                    try {
+                        const response = await fetch('/buzzer-status');
+                        const data = await response.json();
+                        document.getElementById('buzzer-status').innerText = data.status;
+                        document.getElementById('buzzer-status').style.color = (data.status === "Active") ? "green" : "red";
+                    } catch (error) {
+                        console.error('Error fetching buzzer status:', error);
+                        document.getElementById('buzzer-status').innerText = "--";
+                        document.getElementById('buzzer-status').style.color = "black";
+                    }
+                }
 
-        const toggle = document.getElementById("darkModeToggle");
+                // Update every 200ms
+                setInterval(updateBuzzerStatus, 200);
+                updateBuzzerStatus();
+            </script>
 
- 
-        if (localStorage.getItem("theme") === "dark") {
-            document.body.classList.add("dark-mode");
-            toggle.checked = true;
-        }
+            <script>
+                async function updateUltrasonicStatus() {
+                    try {
+                        const response = await fetch('/ultrasonic-data');
+                        const data = await response.json();
 
-        toggle.addEventListener("change", () => {
-            if (toggle.checked) {
-                document.body.classList.add("dark-mode");
-                localStorage.setItem("theme", "dark");
-            } else {
-                document.body.classList.remove("dark-mode");
-                localStorage.setItem("theme", "light");
-            }
-        });
+                        const statusCell = document.getElementById('ultrasonic-status');
+                        statusCell.innerText = data.status; // display "Object Detected!" or "No Object"
+                        statusCell.style.color = (data.status === "Object Detected!") ? "green" : "red";
+                    } catch (error) {
+                        console.error('Error fetching ultrasonic status:', error);
+                        const statusCell = document.getElementById('ultrasonic-status');
+                        //statusCell.innerText = "--";
+                        //statusCell.style.color = "black";
+                    }
+                }
 
-     
+                // Update every 200ms
+                setInterval(updateUltrasonicStatus, 200);
+                updateUltrasonicStatus();
+            </script>
 
-    </script>
+            <script>
+                let authorizedUntil = 0;
 
-    <script>
-    let lastAlarmTime = 0;
+                async function updateTouchStatus() {
+                    try {
+                        const res = await fetch('/touch-status');
+                        const data = await res.json();
 
-    async function checkAlarm() {
-        try {
-            const res = await fetch('/alarm-status');
-            const data = await res.json();
+                        const cell = document.getElementById('capacitive-status');
+                        const now = Date.now();
 
-            if (data.alarm && data.time !== lastAlarmTime) {
-                lastAlarmTime = data.time;
-                showAlert();
-            }
-        } catch (err) {
-            console.error("Alarm check failed", err);
-        }
-    }
+                        // If authorized event just happened → start 10s window
+                        if (data.authorized) {
+                            authorizedUntil = now + 9500; //timer 
+                        }
 
-    function showAlert() {
-        const alertBox = document.getElementById('alert-notification');
-        const bar = alertBox.querySelector('.alert-bar');
+                        // Show AUTHORIZED while timer is active
+                        if (now < authorizedUntil) {
+                            cell.innerText = "Access Granted!";
+                            cell.style.color = "green";
+                            return;
+                        }
 
-        // reset animation
-        bar.style.animation = 'none';       
-        bar.offsetHeight;
-        bar.style.animation = 'alertProgress 5s linear forwards';
+                        // After timeout, reset display
+                        if (data.touch1 && data.touch2) {
+                            cell.innerText = "Authenticating...";
+                            cell.style.color = "orange";
+                        } 
+                        else if (data.touch1 || data.touch2) {
+                            cell.innerText = "Awaiting Dual Touch...";
+                            cell.style.color = "orange";
+                        } 
+                        else {
+                            cell.innerText = "Idle";
+                            cell.style.color = "red";
+                        }
 
-        alertBox.classList.add('show');
+                    } catch (err) {
+                        console.error("Touch status fetch failed:", err);
+                    }
+                }
 
-        setTimeout(() => {
-            alertBox.classList.remove('show');
-        }, 5000);
-    }
-    setInterval(checkAlarm, 500);
-
-    </script>
-
-    <script>
-        const alarmCheckbox = document.getElementById('trigger-alarm');
-
-        alarmCheckbox.addEventListener('change', async () => {
-            const state = alarmCheckbox.checked ? 'on' : 'off';
-            try {
-                await fetch(`/alarm-toggle?state=${state}`);
-            } catch (err) {
-                console.error("Failed to toggle alarm:", err);
-            }
-        });
-    </script>
-
-    <script>
-        async function updateBuzzerStatus() {
-            try {
-                const response = await fetch('/buzzer-status');
-                const data = await response.json();
-                document.getElementById('buzzer-status').innerText = data.status;
-                document.getElementById('buzzer-status').style.color = (data.status === "Active") ? "green" : "red";
-            } catch (error) {
-                console.error('Error fetching buzzer status:', error);
-                document.getElementById('buzzer-status').innerText = "--";
-                document.getElementById('buzzer-status').style.color = "black";
-            }
-        }
-
-        // Update every 200ms
-        setInterval(updateBuzzerStatus, 200);
-        updateBuzzerStatus();
-    </script>
-
-    <script>
-        async function updateUltrasonicStatus() {
-            try {
-                const response = await fetch('/ultrasonic-data');
-                const data = await response.json();
-
-                const statusCell = document.getElementById('ultrasonic-status');
-                statusCell.innerText = data.status; // display "Object Detected!" or "No Object"
-                statusCell.style.color = (data.status === "Object Detected!") ? "green" : "red";
-            } catch (error) {
-                console.error('Error fetching ultrasonic status:', error);
-                const statusCell = document.getElementById('ultrasonic-status');
-                statusCell.innerText = "--";
-                statusCell.style.color = "black";
-            }
-        }
-
-        // Update every 200ms
-        setInterval(updateUltrasonicStatus, 200);
-        updateUltrasonicStatus();
-    </script>
-
-    <script>
-        let authorizedUntil = 0;
-
-async function updateTouchStatus() {
-    try {
-        const res = await fetch('/touch-status');
-        const data = await res.json();
-
-        const cell = document.getElementById('capacitive-status');
-        const now = Date.now();
-
-        // If authorized event just happened → start 10s window
-        if (data.authorized) {
-            authorizedUntil = now + 9500; //timer 
-        }
-
-        // Show AUTHORIZED while timer is active
-        if (now < authorizedUntil) {
-            cell.innerText = "Access Granted!";
-            cell.style.color = "green";
-            return;
-        }
-
-        // After timeout, reset display
-        if (data.touch1 && data.touch2) {
-            cell.innerText = "Authenticating...";
-            cell.style.color = "orange";
-        } 
-        else if (data.touch1 || data.touch2) {
-            cell.innerText = "Awaiting Dual Touch...";
-            cell.style.color = "orange";
-        } 
-        else {
-            cell.innerText = "Idle";
-            cell.style.color = "red";
-        }
-
-    } catch (err) {
-        console.error("Touch status fetch failed:", err);
-    }
-}
-
-setInterval(updateTouchStatus, 200);
-updateTouchStatus();
+                setInterval(updateTouchStatus, 200);
+                updateTouchStatus();
 
 
-    </script>
+            </script>
 
 
 
@@ -864,6 +986,6 @@ updateTouchStatus();
 
 
 
-
+        </div>
     </body>
 </html>
