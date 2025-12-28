@@ -127,9 +127,66 @@
                         </div>
                     </div>
 
+                    <div class="system-status">
+                        <div class="status-item">
+                            <span>System:</span>
+                            <span class="status-dot online"></span>
+                            
+                        </div>
+                        <div class="status-item">
+                            <span>Last Sync:</span>
+                            <span id="last-sync">Just now</span>
+                        </div>
+                        <div class="status-item">
+                            <span>Devices:</span>
+                            <span id="device-count">5 Connected</span>
+                        </div>
+                    </div>
+                    <!--Recent act-->
+
+                   <div class="activity-log">
+                        <h3>Recent Activity</h3>
+
+                        <div class="activity-item">
+                            <span>🔓 Door unlocked</span>
+                            <small>2 mins ago</small>
+                        </div>
+
+                        <div class="activity-item">
+                            <span>💡 Room1 Lights Toggled</span>
+                            <small>5 mins ago</small>
+                        </div>
+
+                        <div class="activity-item">
+                            <span>💡 Room2 Lights Toggled</span>
+                            <small>7 mins ago</small>
+                        </div>
+
+                         <div class="activity-item">
+                            <span>🔔 Motion detected</span>
+                            <small>20 mins ago</small>
+                        </div>
+
+                        <div class="activity-item">
+                            <span>🚨 Intruder Alert! Failed door attempts</span>
+                            <small>10 mins ago</small>
+                        </div>
+
+                       
+                    </div>
+
+
+                    <div class="control-footer">
+                        <span>Mode: Auto</span>
+                        <span>Status: Stable</span>
+                    </div>
+
+
+
+
                 
                     <!-- EVENT SENSORS -->
-
+                    <!--
                     <div class="control-header">
                         <h1>Events</h1>
                     </div>
@@ -138,7 +195,7 @@
                         <div class="event-card" id="capacitive-card">
                             <div class="event-header">
                                 <img src="./images/fingerprint.png" alt="capacitive">
-                                <!--<p>Authentication</p>-->
+                            
                             </div>
                             <p id="capacitive-status">ESP OFFLINE</p>
                         </div>
@@ -146,7 +203,7 @@
                         <div class="event-card" id="sound-card">
                             <div class="event-header">
                                 <img src="./images/sound-dark.png" alt="sound">
-                                <!--<p>Clap Detection</p>-->
+                           
                             </div>
                             <p id="soundSenStatus">ESP OFFLINE</p>
                         </div>
@@ -154,11 +211,11 @@
                         <div class="event-card" id="ultrasonic-card">
                             <div class="event-header">
                                 <img src="./images/radar.png" alt="ultrasonic">
-                                <!--<p>Object Detection</p>-->
+                     
                             </div>
                             <p id="ultrasonic-status">ESP OFFLINE</p>
                         </div>
-                    </div>
+                    </div>-->
 
 
 
@@ -214,11 +271,42 @@
                                 <td id="ultrasonic-status"></td>
                             </tr>-->
 
-
-
-
                         </table>
+
+                        <div class="events">
+                            <div class="column-header">
+                                <h2>Events</h2>
+                            </div>
+
+                            <div id="event-sensors">
+                                <div class="event-card" id="capacitive-card">
+                                    <div class="event-header">
+                                        <img src="./images/fingerprint.png" alt="capacitive">
+                                        <!--<p>Authentication</p>-->
+                                    </div>
+                                    <p id="capacitive-status">ESP OFFLINE</p>
+                                </div>
+
+                                <div class="event-card" id="sound-card">
+                                    <div class="event-header">
+                                        <img src="./images/sound-dark.png" alt="sound">
+                                        <!--<p>Clap Detection</p>-->
+                                    </div>
+                                    <p id="soundSenStatus">ESP OFFLINE</p>
+                                </div>
+
+                                <div class="event-card" id="ultrasonic-card">
+                                    <div class="event-header">
+                                        <img src="./images/radar.png" alt="ultrasonic">
+                                        <!--<p>Object Detection</p>-->
+                                    </div>
+                                    <p id="ultrasonic-status">ESP OFFLINE</p>
+                                </div>
+                        </div>
                     </div>
+                    </div>
+
+                    
 
                     <div class="column">
                         <div class="column-header">
@@ -396,7 +484,7 @@
                             <a href="https://www.facebook.com/jannahmae.gaspar" target="_blank" class="icon" data-label="Jannah Mae Gaspar"><img src="" alt=""></a>
                             <a href="https://www.facebook.com/olegna.nopirg" target="_blank" class="icon" data-label="Angelo Gripon Jr."><img src="" alt=""></a>
                             <a href="https://www.facebook.com/sheinabelle.madridano06" target="_blank" class="icon" data-label="Shiena Rose Madridano"><img src="" alt=""></a>
-                            <a href="https://www.facebook.com/Galo22" target="_blank" class="icon" data-label="Jay Johnlie Galo"><img src="" alt=""></a>
+                            <a href="https://www.facebook.com/Galo22" target="_blank" class="icon" data-label="Jay Johnlie Galo"><img src="./images/galo.jpeg" alt=""></a>
                             
                         </div>
                     </div>
