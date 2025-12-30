@@ -137,13 +137,15 @@
                     </div>
 
                     <div class="system-status">
+                        
                        <div class="status-item">
                             <span>System:</span>
                             <span class="status-label">
-                                <span class="status-dot offline"></span>
-                                Offline
+                                <span id="status-dot"class="status-dot"></span>
+                                <span id="system-status-text">Offline</span>
                             </span>
                         </div>
+
                         <div class="status-item">
                             <span>Uptime:</span>
                             <span id="uptime"></span>
@@ -171,7 +173,7 @@
                         </div>
 
                          <div class="activity-item">
-                            <span>🔔 Motion detected</span>
+                            <span>🔔 Motion detected (room 3)</span>
                             <small>20 mins ago</small>
                         </div>
 
@@ -188,43 +190,6 @@
                         <span>Account:</span>
                         <span><button id="logout-button">Logout</button></span>
                     </div>
-
-
-
-                
-                    <!-- EVENT SENSORS -->
-                    <!--
-                    <div class="control-header">
-                        <h1>Events</h1>
-                    </div>
-
-                    <div id="event-sensors">
-                        <div class="event-card" id="capacitive-card">
-                            <div class="event-header">
-                                <img src="./images/fingerprint.png" alt="capacitive">
-                            
-                            </div>
-                            <p id="capacitive-status">ESP OFFLINE</p>
-                        </div>
-
-                        <div class="event-card" id="sound-card">
-                            <div class="event-header">
-                                <img src="./images/sound-dark.png" alt="sound">
-                           
-                            </div>
-                            <p id="soundSenStatus">ESP OFFLINE</p>
-                        </div>
-
-                        <div class="event-card" id="ultrasonic-card">
-                            <div class="event-header">
-                                <img src="./images/radar.png" alt="ultrasonic">
-                     
-                            </div>
-                            <p id="ultrasonic-status">ESP OFFLINE</p>
-                        </div>
-                    </div>-->
-
-
 
                 </div> 
             </div> 

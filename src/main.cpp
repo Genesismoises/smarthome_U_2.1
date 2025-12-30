@@ -552,6 +552,15 @@ void setup() {
         request->send(200, "application/json", json);
     });
 
+    server.on("/status", HTTP_GET, [](AsyncWebServerRequest *request) {
+        StaticJsonDocument<64> doc;
+        doc["online"] = true;
+        doc["uptime"] = millis() / 1000;
+
+        String json;
+        serializeJson(doc, json);
+        request->send(200, "application/json", json);
+    });
 
 
 

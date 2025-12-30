@@ -565,7 +565,53 @@ setInterval(checkAlarm, 500);
     });
 
 
+    //helper funtion for uptime
+    function formatUptime(seconds) {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    return `${hrs}h ${mins}m ${secs}s`;
+    }
 
 
+async function checkSystemStatus() {
+    try {
+        const response = await fetch("/status", { cache: "no-store" });
+
+        if (!response.ok) throw new Error("ESP not reachable");
+
+        const data = await response.json();
+
+        if (data.online === true) {
+            document.getElementById("system-status-text").textContent = "Online";
+            document.getElementById("status-dot").classList.add("online");
+
+            // ✅ UPDATE UPTIME
+            if (data.uptime !== undefined) {
+                document.getElementById("uptime").textContent =
+                    formatUptime(data.uptime);
+            }
+
+        } else {
+            setOffline();
+        }
+
+    } catch (err) {
+        setOffline();
+    }
+}
+
+function setOffline() {
+    document.getElementById("system-status-text").textContent = "Offline";
+    document.getElementById("status-dot").classList.remove("online");
+    document.getElementById("uptime").textContent = "--";
+}
+
+// Check every 3 seconds
+setInterval(checkSystemStatus, 3000);
+
+// Run once on load
+checkSystemStatus();
 
 });
