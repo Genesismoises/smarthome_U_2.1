@@ -12,12 +12,21 @@
         <script src="/js/chartjs-adapter-date-fns.bundle.min.js"></script>-->
         <script src="./js/dashboard.js"></script>
         <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-pO1t5R5CBvFz41FqFr5J3zv/Nk9E60Xx8h06Gdr99F8+ZoXgCUnOq0U0bN+WgH2mY3x7hG2v1hv3U2okbM8gHg=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            crossorigin="anonymous"
+            >
+        <!--EmailJS-->
+        <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+        <script>
+        (function(){
+            emailjs.init("YnXfMtdgObwMbA1ea"); 
+        })();
+        </script>
+
+
+    
+
 
 
 
@@ -136,13 +145,10 @@
                             </span>
                         </div>
                         <div class="status-item">
-                            <span>Last Sync:</span>
-                            <span id="last-sync">Just now</span>
+                            <span>Uptime:</span>
+                            <span id="uptime"></span>
                         </div>
-                        <div class="status-item">
-                            <span>Devices:</span>
-                            <span id="device-count">5 Connected</span>
-                        </div>
+                    
                     </div>
                     <!--Recent act-->
 
@@ -179,10 +185,9 @@
 
 
                     <div class="control-footer">
-                        <span>Mode: Auto</span>
-                        <span>Status: Stable</span>
+                        <span>Account:</span>
+                        <span><button id="logout-button">Logout</button></span>
                     </div>
-
 
 
 
@@ -472,30 +477,45 @@
                     </div>
                     
                     <div class="footer-col-4">
-                        <h3>Newsletter</h3>
-                        <form>
-                            <i class="far fa-envelope"></i>
-                            <input type="email" placeholder="Enter your email" required>
-                            <button><i class="fas fa-arrow-right"></i></button>
+                        <h3>Message Us</h3>
+                        <form id="contact-form" class="footer-form">
+
+                            <input 
+                                type="email" 
+                                name="email" 
+                                placeholder="Your email" 
+                                required
+                            >
+
+                            <textarea 
+                                name="message" 
+                                rows="3" 
+                                placeholder="Your message" 
+                                required
+                            ></textarea>
+
+                            <button type="submit">
+                                Send Message
+                            </button>
                         </form>
-                        <div class="social-icons">
-                            <h3>Team Members:</h3>
-                            <a href="https://www.facebook.com/genesismoises.baldonasa/" target="_blank" class="icon" data-label="Genesis Moises Baldonasa"><img src="" alt=""></a>
-                            <a href="https://www.facebook.com/marcuskyle.miranda.7" target="_blank" class="icon" data-label="Marcus Kyle Miranda"><img src="" alt=""></a>
-                            <a href="https://www.facebook.com/jeremyyuan.ancheta" target="_blank" class="icon" data-label="Jeremy Yuan Ancheta"><img src="./images/yuan.jpeg" alt=""></a>
-                            <a href="https://www.facebook.com/jannahmae.gaspar" target="_blank" class="icon" data-label="Jannah Mae Gaspar"><img src="" alt=""></a>
-                            <a href="https://www.facebook.com/olegna.nopirg" target="_blank" class="icon" data-label="Angelo Gripon Jr."><img src="" alt=""></a>
-                            <a href="https://www.facebook.com/sheinabelle.madridano06" target="_blank" class="icon" data-label="Shiena Rose Madridano"><img src="" alt=""></a>
-                            <a href="https://www.facebook.com/Galo22" target="_blank" class="icon" data-label="Jay Johnlie Galo"><img src="./images/galo.jpeg" alt=""></a>
-                            
-                        </div>
+
+                
                     </div>
 
                     <div class="footer-col-3">
-                        <h3>Account</h3>
-                        <ul>
-                            <button id="logout-button">Logout</button>
-                        </ul>
+
+                        <div class="social-icons">
+                            <h3>Team Members:</h3>
+                            <a href="https://www.facebook.com/genesismoises.baldonasa/" target="_blank" class="icon" data-label="Genesis Moises Baldonasa"><img src="./images/baldo.jpeg" alt=""></a>
+                            <a href="https://www.facebook.com/marcuskyle.miranda.7" target="_blank" class="icon" data-label="Marcus Kyle Miranda"><img src="./images/miranda.jpeg" alt=""></a>
+                            <a href="https://www.facebook.com/jeremyyuan.ancheta" target="_blank" class="icon" data-label="Jeremy Yuan Ancheta"><img src="./images/ancheta.jpeg" alt=""></a>
+                            <a href="https://www.facebook.com/jannahmae.gaspar" target="_blank" class="icon" data-label="Jannah Mae Gaspar"><img src="./images/gaspar.jpeg" alt=""></a>
+                            <a href="https://www.facebook.com/olegna.nopirg" target="_blank" class="icon" data-label="Angelo Gripon Jr."><img src="./images/gripon.jpeg" alt=""></a>
+                            <a href="https://www.facebook.com/sheinabelle.madridano06" target="_blank" class="icon" data-label="Shiena Rose Madridano"><img src="./images/madridano.jpeg" alt=""></a>
+                            <a href="https://www.facebook.com/Galo22" target="_blank" class="icon" data-label="Jay Johnlie Galo"><img src="./images/galo.jpeg" alt=""></a>
+                            
+                        </div>
+                        
                     </div>
                 </div>
                 <div class="footer-bottom">

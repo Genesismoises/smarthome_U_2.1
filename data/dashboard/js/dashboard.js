@@ -547,5 +547,25 @@ setInterval(checkAlarm, 500);
     setInterval(updateActivityLog, 5000);
 
 
+    //Email JS
+    document.getElementById("contact-form").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        emailjs.sendForm(
+            "service_a15stym",   // from EmailJS
+            "template_ol8i408",  // from EmailJS
+            this
+        ).then(() => {
+            alert("Message sent successfully!");
+            this.reset();
+        }, (error) => {
+            alert("Failed to send message.");
+            console.error(error);
+        });
+    });
+
+
+
+
 
 });

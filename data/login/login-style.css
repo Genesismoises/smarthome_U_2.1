@@ -135,7 +135,8 @@ button:hover {
 
 @media (max-width: 800px) {
   .login-card {
-    width: 90%;
+    width: 60%;
+    height: auto;
     padding: 30px 24px;
   }
 
